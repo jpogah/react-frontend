@@ -1,17 +1,18 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: '50ch',
     },
   },
   button: {
-    marginLeft: 60
+    marginLeft: 10,
+    width: '52ch'
   }
 }));
 
@@ -19,10 +20,12 @@ export const Login = ({state, handleChange, handleLogin}) => {
   const classes = useStyles();
 
   return (
+    <>
+   <Typography variant='h6' align='center'>Sign In</Typography>
+    <Grid container direction='column' alignItems='center'>
     <form className={classes.root} noValidate autoComplete="off">
-      
-      <Grid container direction="column" spacing={2} >
-        <Grid item xs={4} justify="center">
+      <Grid container direction="column"  justify='center' spacing={2} >
+        <Grid item xs={4} >
         <TextField
           required
           id="outlined-required"
@@ -33,7 +36,7 @@ export const Login = ({state, handleChange, handleLogin}) => {
           onChange={handleChange}
         />
         </Grid>
-       <Grid item xs={4} justify="center">
+       <Grid item xs={4}>
         <TextField
           id="outlined-password-input"
           label="Password"
@@ -46,10 +49,12 @@ export const Login = ({state, handleChange, handleLogin}) => {
         /> 
         </Grid> 
 
-        <Grid item xs={2} justify="center">
+        <Grid item xs={2} >
           <Button variant="contained" className={classes.button} color="primary" onClick={handleLogin}>Login</Button>
           </Grid>  
       </Grid>
     </form>
+    </Grid>
+    </>
   );
 }

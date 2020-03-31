@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes } from './components/routes';
 import { withCookies} from 'react-cookie';
 import { MenuAppBar } from './components/menu-app-bar';
-import { performJwtAuth, onSuccessfulLogin } from './components/authentication-service';
+import { performJwtAuth, onSuccessfulLogin, isUserLoggedIn } from './components/authentication-service';
 import history from './components/history';
 
 const API_URL = 'http://localhost:8080/api/';
@@ -53,6 +53,7 @@ function App() {
     const handleLogin = ()=> {
         console.log('username', state.username);
         performJwtAuth(state.username, state.password).then((response) =>{
+            setState({isAuthenticated: true});
            onSuccessfulLogin(state.username, response.headers.get('Authorization'))
             history.push( '/');
         }).catch(() => {
@@ -61,13 +62,17 @@ function App() {
 
     }
 
-    const handleLogout = ()=> {
+    const login = () => {
+        history.push('/login');
+      }
+      const logout = () => {
+        sessionStorage.removeItem('authenticatedUser');
+        console.log('logout');
+        setState({isAuthenticated: false})
+       history.push('/');
+      }
+    
 
-    }
-
-    const handleReviewChange = (event) =>{
-      setState({review: {[event.target.name]: event.target.value} });
-    }
 
     React.useEffect(() => {
         fetch(state.url).then(
@@ -80,7 +85,7 @@ function App() {
     return (
         <>
        
-            <MenuAppBar state={state} />
+            <MenuAppBar state={state} login={login} logout={logout} />
             <Routes state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}

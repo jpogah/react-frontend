@@ -25,15 +25,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MenuAppBar = () => {
+export const MenuAppBar = ({state, login, logout}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
-  const check = isUserLoggedIn;
-  React.useEffect(() => {
-    setIsLoggedIn(check);
-  }, [check])
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -42,15 +37,6 @@ export const MenuAppBar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleLogin = () => {
-    history.push('/login');
-  }
-  const handleLogout = () => {
-    logout();
-    setIsLoggedIn(isUserLoggedIn())
-    history.push('/');
-  }
-
   return (
     <div className={classes.root}>
       <FormGroup>
@@ -62,10 +48,10 @@ export const MenuAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-  {isLoggedIn ? <Button onClick={handleLogout}>Logout</Button> :
-  <Button onClick={handleLogin}>Login</Button>}
+  {state.isAuthenticated ? <Button onClick={logout}>Logout</Button> :
+  <Button onClick={login}>Login</Button>}
           </Typography>
-          {isUserLoggedIn && (
+          {state.isAuthenticated && (
             <div>
               <IconButton
                 aria-label="account of current user"

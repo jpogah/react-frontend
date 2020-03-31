@@ -17,7 +17,7 @@ export const Routes = ({state,courses, handleChange, handleSearch, links, setSta
     return (
         <Router history={history}>
         <Switch>
-        <Route  exact path="/"  render={(props)=><Home state={state} courses={courses} handleChange={handleChange} handleSearch={handleSearch} links={links} setState={setState} /> } />
+        <Route  exact path="/"  render={(props)=><Home state={state} courses={courses} handleChange={handleChange} handleSearch={handleSearch} links={links} setState={setState}  /> } />
         <Route path="/courses/:id"  component={Course} />
        <AuthenticatedRoute  path="/:id/reviews"  component={Review} />
         <Route path='/login' render={(props)=><Login state={state} handleChange={handleChange} handleLogin={handleLogin}/>} />
