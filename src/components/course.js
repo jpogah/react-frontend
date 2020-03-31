@@ -1,14 +1,17 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, TableBody, TableRow, Link } from '@material-ui/core';
+import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, Divider } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 
+
+const API_URL = 'http://localhost:8080/api/courses';
 
 export const Course = () => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
 
     React.useEffect(() => {
-        fetch(`/api/degreePrograms/${id}`).then(
+        fetch(`${API_URL}/${id}`).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 console.log('programs',result);
@@ -17,7 +20,8 @@ export const Course = () => {
 
 
     return (
-        <Grid container spacing={3}>
+        <>
+        <Grid container spacing={10}>
             <Grid container item xs={6}>
           <Box>
            <Typography variant="h6">{course.programName}</Typography>
@@ -42,6 +46,21 @@ export const Course = () => {
                        </TableBody>
                    
                </TableContainer>
-           </Grid>
-           </Grid>)
+               </Grid>
+               <Grid>
+             </Grid>
+             <Grid container>
+                 <Grid item xs={8}>
+               <Box marginLeft={5}>
+                <Typography variant='h6'>Student reviews</Typography>
+               </Box>
+               </Grid>
+               <Box>
+               <Button  component={RouterLink} to={ '/' + id + '/reviews'} color='primary' variant='contained'>Add a Review</Button>
+               </Box>
+               </Grid>
+               </Grid>
+            
+            </>
+           )
 }

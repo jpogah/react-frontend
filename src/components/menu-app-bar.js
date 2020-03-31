@@ -15,7 +15,7 @@ import Menu from '@material-ui/core/Menu';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    marginBottom: 10
+    marginBottom: 40
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MenuAppBar = ({ state, onLogin, onLogout}) => {
+export const MenuAppBar = ({ state}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

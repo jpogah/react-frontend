@@ -33,7 +33,7 @@ export const CourseList = ({ data }) => {
         <ListItemAvatar>
           <Avatar alt={course.schoolName} src={course.img} />
         </ListItemAvatar>
-        <ListItemLink to={'/degreePrograms/' + course._links.self.href.substr(course._links.self.href.lastIndexOf('/') + 1)}>
+        <ListItemLink to={'/courses/' + course._links.self.href.substr(course._links.self.href.lastIndexOf('/') + 1)}>
           <ListItemText
             primary={course.programName}
             secondary={

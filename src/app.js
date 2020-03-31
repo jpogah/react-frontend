@@ -2,10 +2,14 @@ import React from 'react';
 import { Routes } from './components/routes';
 import { withCookies} from 'react-cookie';
 import { MenuAppBar } from './components/menu-app-bar';
+import { performJwtAuth, onSuccessfulLogin } from './components/authentication-service';
+import history from './components/history';
 
-const API_URL = '/api/degreePrograms';
+const API_URL = 'http://localhost:8080/api/';
 function App() {
      const [links , setLinks]  = React.useState({});
+     const [ review, setReview] = React.useState({});
+     const [ currentProgramId, setCurrentProgramId] = React.useState(undefined);
     const [state, setState] = React.useState({
         searchTerm: null,
         location: null,
@@ -13,7 +17,16 @@ function App() {
         isLoading: true,
         isAuthenticated: false,
         user: null,
-        url: API_URL,
+        url: `${API_URL}courses`,
+        username: '',
+        password: '',
+        hasLoginFailed: false,
+        showLoginSuccessMsg: false,
+        name: '',
+        rating: '',
+        reviewText: '',
+    
+
     });
 
     const [courses, setCourses] = React.useState([]);
@@ -24,30 +37,45 @@ function App() {
             [event.target.name]: value
         })
     }
+
+
     const handleSearch = () => {
         let searchParam = '';
         console.log('before url',state.url)
         searchParam = state.searchTerm ? `searchTerm=${state.searchTerm}` : searchParam;
         searchParam = state.location ? `${searchParam}&location=${state.location}`: searchParam;
         setState({ url : searchParam.length === 0 ? API_URL
-        : `${API_URL}/search/searchBy?${searchParam}`});
+        : `${API_URL}courses/search/searchBy?${searchParam}`});
         console.log('searchparam',searchParam);
         console.log('after url', state.url);
     }
 
-    const login = ()=> {
+    const handleLogin = ()=> {
+        console.log('username', state.username);
+        performJwtAuth(state.username, state.password).then((response) =>{
+            console.log('token', response.headers.get('Authorization'));
+            sessionStorage.setItem('token', response.headers.get('Authorization'));
+
+            onSuccessfulLogin(state.username, response.headers.get('Authorization'))
+            history.push( '/');
+        }).catch(() => {
+            setState({ showLoginSuccessMsg: false, hasLoginFailed: true});
+        })
 
     }
 
-    const logout = ()=> {
+    const handleLogout = ()=> {
 
     }
-   
+
+    const handleReviewChange = (event) =>{
+      setState({review: {[event.target.name]: event.target.value} });
+    }
 
     React.useEffect(() => {
         fetch(state.url).then(
             response => response.json()).then(result => {
-                setCourses(result._embedded.degreePrograms);
+                setCourses(result._embedded.courses);
                 setLinks(result._links);
                 console.log('courses', result);
             })
@@ -55,8 +83,11 @@ function App() {
     return (
         <>
        
-            <MenuAppBar state={state} login={login}  logout={logout}/>
-            <Routes state={state} courses={courses} handleChange={handleChange} handleSearch={handleSearch} links={links} setState={setState}/>
+            <MenuAppBar state={state} />
+            <Routes state={state} courses={courses} handleChange={handleChange}
+             handleSearch={handleSearch}
+             handleLogin={handleLogin} links={links} setState={setState}
+             setCurrentProgramId={setCurrentProgramId} />
 
         </>)
 }
