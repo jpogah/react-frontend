@@ -9,14 +9,22 @@ const API_URL = 'http://localhost:8080/api/courses';
 export const Course = () => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
+    const [reviews, setReviews]=React.useState([]);
 
     React.useEffect(() => {
         fetch(`${API_URL}/${id}`).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 console.log('programs',result);
-            })
+            });
+            fetch(`${API_URL}/${id}/reviews`).then(
+                response => response.json()).then(result => {
+                    setReviews(result._embedded.reviews);
+                    console.log('reviews',result);
+                });
+
     }, [id])
+
 
 
     return (
@@ -59,6 +67,9 @@ export const Course = () => {
                <Button  component={RouterLink} to={ '/' + id + '/reviews'} color='primary' variant='contained'>Add a Review</Button>
                </Box>
                </Grid>
+               <ul>
+                   { reviews && reviews.map((review) => <li><span>{review.rating}</span>   <span>{review.reviewText}</span></li>)}
+               </ul>
                </Grid>
             
             </>

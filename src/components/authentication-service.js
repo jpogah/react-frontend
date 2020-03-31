@@ -30,8 +30,8 @@ export const onSuccessfulLogin = (username, token) => {
     }
     ).then(response => {
         response.json().then(result => {
-            console.log('reviewLinks', result._links.reviews.href);
-            sessionStorage.setItem('reviewLink', result._links.reviews.href);
+            console.log('reviewLinks', result._links.self.href);
+            sessionStorage.setItem('reviewLink', result._links.self.href);
         })
     }).catch( () => {
         console.log('error fetching user data')

@@ -51,7 +51,7 @@ export const Review = () => {
             'Authorization' : sessionStorage.getItem('token'),
             'Content-Type': 'application/json'  
         })
-        const reviewResponse={};     
+        let reviewResponse={};     
         fetch(`${API_URL}reviews`,{
             method: 'POST',
             headers: headers,
@@ -60,12 +60,13 @@ export const Review = () => {
             ).then(response => {
                 return response.json()}).then( (result) => {
                     console.log('second result', result)
-                    fetch(sessionStorage.getItem('reviewLink'),{
+                    reviewResponse = result;
+                    fetch(result._links.user.href,{
                         method: 'PUT',
                         headers: new Headers({
                             'Authorization': sessionStorage.getItem('token'),
                             'Content-Type': 'text/uri-list'}),
-                        body: result._links.self.href
+                        body:  sessionStorage.getItem('reviewLink')
                         }).then(response => {
                        return  response.json()
                     }).
@@ -76,12 +77,12 @@ export const Review = () => {
                         console.log('failed to add review resource to users')
                     })
 
-                    fetch(course._links.reviews.href,{
+                    fetch(reviewResponse._links.course.href,{
                         method: 'PUT',
                         headers: new Headers({
                             'Authorization': sessionStorage.getItem('token'),
                             'Content-Type': 'text/uri-list'}),
-                        body: result._links.self.href
+                        body: course._links.self.href
                     }).then(response => {
                        return  response.json().then( resource2 => {
                          console.log("added review resource to course: " , resource2)
