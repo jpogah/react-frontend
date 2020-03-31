@@ -68,7 +68,7 @@ export const Course = () => {
                </Box>
                </Grid>
                <ul>
-                   { reviews && reviews.map((review) => <li><span>{review.rating}</span>   <span>{review.reviewText}</span></li>)}
+                   { reviews && reviews.map((review) => <li key={review._links.self.href}><span>{review.rating}</span>   <span>{review.reviewText}</span></li>)}
                </ul>
                </Grid>
             

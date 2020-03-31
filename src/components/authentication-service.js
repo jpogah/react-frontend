@@ -44,7 +44,10 @@ export const createJWTToken= (token) => {
 }
 
 export const logout = () => {
+    console.log('remove user name: ', sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME))
     sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+    console.log('removing token: ')
+    sessionStorage.removeItem('token', sessionStorage.getItem('token'));
 }
 
 export const isUserLoggedIn = () => {

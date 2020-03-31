@@ -53,10 +53,7 @@ function App() {
     const handleLogin = ()=> {
         console.log('username', state.username);
         performJwtAuth(state.username, state.password).then((response) =>{
-            console.log('token', response.headers.get('Authorization'));
-            sessionStorage.setItem('token', response.headers.get('Authorization'));
-
-            onSuccessfulLogin(state.username, response.headers.get('Authorization'))
+           onSuccessfulLogin(state.username, response.headers.get('Authorization'))
             history.push( '/');
         }).catch(() => {
             setState({ showLoginSuccessMsg: false, hasLoginFailed: true});

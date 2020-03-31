@@ -6,11 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { isUserLoggedIn, logout } from './authentication-service';
+import { Button, FormGroup, MenuItem } from '@material-ui/core';
+import {Link} from 'react-router-dom';
+import history from './history';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,10 +25,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MenuAppBar = ({ state}) => {
+export const MenuAppBar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const check = isUserLoggedIn;
+  React.useEffect(() => {
+    setIsLoggedIn(check);
+  }, [check])
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +42,14 @@ export const MenuAppBar = ({ state}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleLogin = () => {
+    history.push('/login');
+  }
+  const handleLogout = () => {
+    logout();
+    setIsLoggedIn(isUserLoggedIn())
+    history.push('/');
+  }
 
   return (
     <div className={classes.root}>
@@ -49,9 +62,10 @@ export const MenuAppBar = ({ state}) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            x 
+  {isLoggedIn ? <Button onClick={handleLogout}>Logout</Button> :
+  <Button onClick={handleLogin}>Login</Button>}
           </Typography>
-          {state.is && (
+          {isUserLoggedIn && (
             <div>
               <IconButton
                 aria-label="account of current user"

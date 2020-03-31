@@ -13,7 +13,7 @@ import { Login } from './login';
 
 
 
-export const Routes = ({state,courses, handleChange, handleSearch, links, setState, handleLogin, addReview, setCurrentProgramId}) => {
+export const Routes = ({state,courses, handleChange, handleSearch, links, setState, handleLogin}) => {
     return (
         <Router history={history}>
         <Switch>
