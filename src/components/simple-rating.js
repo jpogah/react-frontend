@@ -11,17 +11,18 @@ const getRating=(reviews)=>{
   return sum/reviews.length;
 }
 
-export const SimpleRating = ({value, reviews}) => {
+export const SimpleRating = ({value}) => {
   return (
     <div>
     { value && <Box component="fieldset" mb={3} borderColor="transparent">
         <Typography component="legend"></Typography>
         <Rating name="read-only" value={value} readOnly />
       </Box> }  
-      {reviews && <Box component="fieldset" mb={3} borderColor="transparent">
+
+      { !value && <Box component="fieldset" mb={3} borderColor="transparent">
         <Typography component="legend"></Typography>
-        <Rating name="read-only" value={getRating(reviews)} readOnly />
-      </Box> }
+        <Rating name="read-only" value={0} readOnly />
+      </Box> }  
     </div>
   );
 }

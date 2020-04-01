@@ -4,6 +4,7 @@ import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, Tabl
 import { Link as RouterLink } from 'react-router-dom';
 import { SimpleRating } from './simple-rating';
 import { fetchData } from './authentication-service';
+import moment from 'moment';
 
 
 const API_URL = 'http://localhost:8080/api/';
@@ -37,8 +38,10 @@ export const Course = () => {
             response => response.json()).then(result => {
                 setReviews(result._embedded.reviews);
                 console.log('reviews',result);
+                setNoOfReviews(reviews.length);
             });
     }, [id])
+
 
 
 
@@ -48,7 +51,7 @@ export const Course = () => {
         <Grid container spacing={10}>
             <Grid container item xs={6}>
           <Box>
-           <Typography variant="h6">{course.programName}</Typography><SimpleRating value={reviews}/>
+           <Typography variant="h6">{course.programName}</Typography><SimpleRating value={course.rating}/>
            <Typography variant="body2">{course.programDetails}</Typography>
            </Box>
            </Grid>
@@ -90,6 +93,7 @@ export const Course = () => {
                        <Grid item><SimpleRating value={review.rating}/></Grid>
                      <Grid item>{review.username}</Grid>
                      <Grid item>{review.reviewText}</Grid>
+                     <Grid item>{moment(review.createdTime).startOf('hour').fromNow()}</Grid>
                      </Grid>)
                    })}
                

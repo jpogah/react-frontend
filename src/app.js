@@ -17,7 +17,7 @@ function App() {
         isLoading: true,
         isAuthenticated: false,
         user: null,
-        url: `${API_URL}courses`,
+        url: 'http://localhost:8080/api/courses',
         username: '',
         password: '',
         hasLoginFailed: false,

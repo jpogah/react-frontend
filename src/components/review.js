@@ -49,11 +49,28 @@ export const Review = () => {
 
 
     const addReview = () => {
+        course.totalReviews = 1 + course.totalReviews;
+        course.rating = Math.ceil((course.rating + review.rating)/ (1.0 * course.totalReviews));
         const headers = new Headers({
             'Authorization' : sessionStorage.getItem('token'),
             'Content-Type': 'application/json'  
         })
-        let reviewResponse={};     
+        let reviewResponse={}; 
+        
+        // update course
+        fetch(course._links.self.href, {
+            method: 'PATCH',
+            headers: headers,
+            body: JSON.stringify(course)
+        }).then(response => {
+            return response.json();
+        }).then(() =>{
+        console.log("coourse updated");
+        }
+        ).catch(() => {
+            console.log("cannot update course")
+        })
+
         fetch(`${API_URL}reviews`,{
             method: 'POST',
             headers: headers,

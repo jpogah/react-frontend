@@ -51,7 +51,7 @@ export const CourseList = ({ data }) => {
                { !course.greRequired && (<Alert variant="outlined" severity="info">
                    <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }
-              <SimpleRating value={4}/>
+              <SimpleRating value={course.rating}/>
               </React.Fragment>
             }
           />
