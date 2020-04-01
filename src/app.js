@@ -5,7 +5,7 @@ import { MenuAppBar } from './components/menu-app-bar';
 import { performJwtAuth, onSuccessfulLogin, isUserLoggedIn } from './components/authentication-service';
 import history from './components/history';
 
-const API_URL = 'http://localhost:8080/api/';
+const API_URL = 'http://localhost:8080/';
 function App() {
      const [links , setLinks]  = React.useState({});
      const [ review, setReview] = React.useState({});
@@ -16,7 +16,6 @@ function App() {
         degree: '',
         isLoading: true,
         isAuthenticated: false,
-        user: null,
         url: 'http://localhost:8080/api/courses',
         username: '',
         password: '',
@@ -45,28 +44,38 @@ function App() {
         searchParam = state.searchTerm ? `searchTerm=${state.searchTerm}` : searchParam;
         searchParam = state.location ? `${searchParam}&location=${state.location}`: searchParam;
         setState({ url : searchParam.length === 0 ? API_URL
-        : `${API_URL}courses/search/searchBy?${searchParam}`});
+        : `${API_URL}api/courses/search/searchBy?${searchParam}`});
         console.log('searchparam',searchParam);
         console.log('after url', state.url);
     }
 
     const handleLogin = ()=> {
         console.log('username', state.username);
-        performJwtAuth(state.username, state.password).then((response) =>{
-            setState({isAuthenticated: true});
-           onSuccessfulLogin(state.username, response.headers.get('Authorization'))
-            history.push( '/');
-        }).catch(() => {
-            setState({ showLoginSuccessMsg: false, hasLoginFailed: true});
+        const user = {
+            'userName': state.username,
+            'password': state.password
+        }
+        fetch(`${API_URL}login`, {
+            method: 'POST',
+            body: JSON.stringify(user)
+        }).then((response => {
+            const jwtToken = response.headers.get('Authorization');
+            if (jwtToken !== null){
+                console.log('login successful', jwtToken)
+                sessionStorage.setItem('jwtToken', jwtToken);
+                setState({isAuthenticated: true})
+            }
+        })).catch(() => {
+            console.log('error occured on login')
         })
-
+        history.push('/');
     }
 
     const login = () => {
         history.push('/login');
       }
       const logout = () => {
-        sessionStorage.removeItem('authenticatedUser');
+        sessionStorage.removeItem('jwtToken');
         console.log('logout');
         setState({isAuthenticated: false})
        history.push('/');

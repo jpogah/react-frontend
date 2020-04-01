@@ -93,7 +93,7 @@ export const Course = () => {
                        <Grid item><SimpleRating value={review.rating}/></Grid>
                      <Grid item>{review.username}</Grid>
                      <Grid item>{review.reviewText}</Grid>
-                     <Grid item>{moment(review.createdTime).startOf('hour').fromNow()}</Grid>
+                     <Grid item>{moment(review.createdTime).format('MMMM Do YYYY')}</Grid>
                      </Grid>)
                    })}
                
