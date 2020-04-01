@@ -14,15 +14,16 @@ export const performJwtAuth = (username, password) => {
     })
 }
 
+const headers = new Headers({
+    'Authorization' : sessionStorage.getItem('token'),
+    'Content-Type': 'application/json'  
+}) ;
 
 export const onSuccessfulLogin = (username, token) => {
     sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
     sessionStorage.setItem('token',token );
     // Need to store the user reviews links in session
-    const headers = new Headers({
-        'Authorization' : sessionStorage.getItem('token'),
-        'Content-Type': 'application/json'  
-    }) ;
+
 
     fetch(`${API_URL}/api/users/search/searchByUserName?username=${username}`,{
        method: 'GET',
@@ -39,6 +40,20 @@ export const onSuccessfulLogin = (username, token) => {
   //  setupAxiosInterceptors(createJWTToken(token))
 }
 
+export const fetchData = ( url ) => {
+    fetch(url,{
+        method: 'GET',
+        headers: headers 
+     }
+     ).then(response => {
+       return response.json()}).then(result => {
+           return result;
+         }
+     ).catch( () => {
+         console.log('error fetching user data')
+     })
+}
+
 export const createJWTToken= (token) => {
     return 'Bearer ' + token
 }
@@ -47,7 +62,7 @@ export const logout = () => {
     console.log('remove user name: ', sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME))
     sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
     console.log('removing token: ')
-    sessionStorage.removeItem('token', sessionStorage.getItem('token'));
+   // sessionStorage.removeItem('token', sessionStorage.getItem('token'));
 }
 
 export const isUserLoggedIn = () => {

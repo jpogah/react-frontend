@@ -1,29 +1,45 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, Divider } from '@material-ui/core';
+import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, Divider, ListItem, ListItemText } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import { SimpleRating } from './simple-rating';
+import { fetchData } from './authentication-service';
 
 
-const API_URL = 'http://localhost:8080/api/courses';
+const API_URL = 'http://localhost:8080/api/';
 
 export const Course = () => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
+    const [rating, setRating] = React.useState(0);
+    
+    React.useEffect(()=> {
+        const res = fetchData(`${API_URL}course/rating?id=${id}`);
+        console.log('res', res);
+        setRating(res);
+
+    }, [])
+
 
     React.useEffect(() => {
-        fetch(`${API_URL}/${id}`).then(
+        fetch(`${API_URL}courses/${id}`).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 console.log('programs',result);
             });
-            fetch(`${API_URL}/${id}/reviews`).then(
-                response => response.json()).then(result => {
-                    setReviews(result._embedded.reviews);
-                    console.log('reviews',result);
-                });
 
     }, [id])
+
+    React.useEffect(()=> {
+
+        fetch(`${API_URL}courses/${id}/reviews`).then(
+            response => response.json()).then(result => {
+                setReviews(result._embedded.reviews);
+                console.log('reviews',result);
+            });
+    }, [id])
+
 
 
 
@@ -32,7 +48,7 @@ export const Course = () => {
         <Grid container spacing={10}>
             <Grid container item xs={6}>
           <Box>
-           <Typography variant="h6">{course.programName}</Typography>
+           <Typography variant="h6">{course.programName}</Typography><SimpleRating value={reviews}/>
            <Typography variant="body2">{course.programDetails}</Typography>
            </Box>
            </Grid>
@@ -67,9 +83,16 @@ export const Course = () => {
                <Button  component={RouterLink} to={ '/' + id + '/reviews'} color='primary' variant='contained'>Add a Review</Button>
                </Box>
                </Grid>
-               <ul>
-                   { reviews && reviews.map((review) => <li key={review._links.self.href}><span>{review.rating}</span>   <span>{review.reviewText}</span></li>)}
-               </ul>
+               
+                   { reviews && reviews.map((review) => {
+                     return (<Grid container alignitems='center'  spacing={3} >
+                         <Grid item xs={0} />
+                       <Grid item><SimpleRating value={review.rating}/></Grid>
+                     <Grid item>{review.username}</Grid>
+                     <Grid item>{review.reviewText}</Grid>
+                     </Grid>)
+                   })}
+               
                </Grid>
             
             </>

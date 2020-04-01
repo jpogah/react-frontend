@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Avatar, ListItemAvatar } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { SimpleRating } from './simple-rating';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,11 +51,11 @@ export const CourseList = ({ data }) => {
                { !course.greRequired && (<Alert variant="outlined" severity="info">
                    <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }
+              <SimpleRating value={4}/>
               </React.Fragment>
             }
           />
         </ListItemLink>
-
       </ListItem>
         <Divider /></>)}
     </List>

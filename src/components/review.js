@@ -2,6 +2,7 @@ import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
+import { USER_NAME_SESSION_ATTRIBUTE_NAME } from './authentication-service';
 
 const API_URL = 'http://localhost:8080/api/';
 const useStyles = makeStyles(theme => ({
@@ -30,7 +31,8 @@ export const Review = () => {
     const { id } = useParams();
     const [review, setReview] = React.useState({
         rating: 1,
-        reviewText: ''
+        reviewText: '',
+        username: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
     });
     
 
