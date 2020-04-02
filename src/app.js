@@ -8,11 +8,9 @@ import history from './components/history';
 const API_URL = 'http://localhost:8080/';
 function App() {
      const [links , setLinks]  = React.useState({});
-     const [ review, setReview] = React.useState({});
-     const [ currentProgramId, setCurrentProgramId] = React.useState(undefined);
+     const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
+     const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
     const [state, setState] = React.useState({
-        searchTerm: null,
-        location: null,
         degree: '',
         isLoading: true,
         isAuthenticated: false,
@@ -38,11 +36,19 @@ function App() {
     }
 
 
+    React.useEffect(()=> {
+        localStorage.setItem('searchTerm', searchTerm);
+    }, [searchTerm])
+
+    React.useEffect(()=> {
+        localStorage.setItem('location', location);
+    }, [location])
+
     const handleSearch = () => {
         let searchParam = '';
         console.log('before url',state.url)
-        searchParam = state.searchTerm ? `searchTerm=${state.searchTerm}` : searchParam;
-        searchParam = state.location ? `${searchParam}&location=${state.location}`: searchParam;
+        searchParam = searchTerm ? `searchTerm=${searchTerm}` : searchParam;
+        searchParam = location ? `${searchParam}&location=${location}`: searchParam;
         setState({ url : searchParam.length === 0 ? API_URL
         : `${API_URL}api/courses/search/searchBy?${searchParam}`});
         console.log('searchparam',searchParam);
@@ -95,10 +101,10 @@ function App() {
         <>
        
             <MenuAppBar state={state} login={login} logout={logout} />
-            <Routes state={state} courses={courses} handleChange={handleChange}
+            <Routes isAuthenticated={state.isAuthenticated} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
-             setCurrentProgramId={setCurrentProgramId} />
+             setSearchTerm={setSearchTerm} setLocation={setLocation} searchTerm={searchTerm} location={location}/>
 
         </>)
 }

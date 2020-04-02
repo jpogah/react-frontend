@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Search({ state, onSearchChange, onSearch }) {
+export default function Search({ setSearchTerm,setLocation,searchTerm, location, onSearch }) {
   //const [value, setValue] = React.useState('Controlled');
   const classes = useStyles();
   
@@ -33,7 +33,7 @@ export default function Search({ state, onSearchChange, onSearch }) {
                 placeholder="Search Course"
                 multiline
                 variant="outlined"
-                value={state.searchTerm}
+                value={searchTerm}
                 name="searchTerm"
                 InputProps={{
                   startAdornment: (
@@ -43,7 +43,7 @@ export default function Search({ state, onSearchChange, onSearch }) {
                   ),
                   className: classes.textField
                 }}
-                onChange={onSearchChange}
+                onChange={(e) => { setSearchTerm(e.target.value)}}
               />
             </Box>
           </Grid>
@@ -54,7 +54,7 @@ export default function Search({ state, onSearchChange, onSearch }) {
               multiline
               name="location"
               label="Location"
-              value={state.location}
+              value={location}
               variant="outlined"
               InputProps={{
                 startAdornment: (
@@ -64,7 +64,7 @@ export default function Search({ state, onSearchChange, onSearch }) {
                 ),
                 className: classes.textField
               }}
-              onChange={onSearchChange}
+              onChange={(e)=>{setLocation(e.target.value)} }
             />
           </Grid>
           <Grid container item xs={1} justify="flex-end">

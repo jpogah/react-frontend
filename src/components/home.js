@@ -8,10 +8,10 @@ const getUrl = (href) =>{
    return href.substr(href.indexOf('/api'));
 }
 
-export const Home = ({state, courses, handleChange, handleSearch, setState, links}) => {
+export const Home = ({setSearchTerm,setLocation, courses, handleSearch, setState, links, searchTerm, location}) => {
     return (
         <>
-         <Search state={state} onSearchChange={handleChange} onSearch={handleSearch} />
+         <Search setSearchTerm={setSearchTerm} setLocation={setLocation}  searchTerm={searchTerm} location={location} onSearch={handleSearch} />
          {courses && courses.length > 0 && (<div><CourseList data={courses} /></div>)}
          <Grid container>
              <Grid item xs={4}/>

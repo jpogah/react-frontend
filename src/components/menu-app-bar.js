@@ -48,8 +48,8 @@ export const MenuAppBar = ({state, login, logout}) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-  {state.isAuthenticated ? <Button onClick={logout}>Logout</Button> :
-  <Button onClick={login}>Login</Button>}
+  {state.isAuthenticated ? <Button variant="contained"  color='primary' onClick={logout}>Logout</Button> :
+  <Button variant="contained" color='primary' onClick={login}>Login</Button>}
           </Typography>
           {state.isAuthenticated && (
             <div>

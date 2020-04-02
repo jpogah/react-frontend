@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { Avatar, ListItemAvatar } from '@material-ui/core';
+import { Avatar, ListItemAvatar,Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { SimpleRating } from './simple-rating';
@@ -30,12 +30,15 @@ export const CourseList = ({ data }) => {
 
   return (
     <List className={classes.root}>
-      {data.map((course) => <><ListItem key={course._links.self.href} alignItems="flex-start">
+      {data.map((course) => 
+      <Grid container direction='column'>
+        <Grid item xs={8}>
+      <ListItem key={course._links.self.href} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={course.schoolName} src={course.img} />
         </ListItemAvatar>
         <ListItemLink to={'/courses/' + course._links.self.href.substr(course._links.self.href.lastIndexOf('/') + 1)}>
-          <ListItemText
+          <ListItemText component='div'
             primary={course.programName}
             secondary={
               <React.Fragment>
@@ -48,16 +51,20 @@ export const CourseList = ({ data }) => {
                   {course.schoolName + ', '}
                 </Typography>
                 {course.city + ', ' + course.state}
-               { !course.greRequired && (<Alert variant="outlined" severity="info">
-                   <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
-              </Alert>) }
-              <SimpleRating value={course.rating}/>
               </React.Fragment>
             }
           />
         </ListItemLink>
       </ListItem>
-        <Divider /></>)}
+      </Grid>
+      <Grid item xs={8}>
+      { !course.greRequired && (<Alert variant="outlined" severity="info">
+                   <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
+              </Alert>) }
+              <SimpleRating value={course.rating}/>
+      </Grid>
+      </Grid>
+      )}
     </List>
   );
 }
