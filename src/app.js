@@ -8,6 +8,7 @@ function App() {
      const [links , setLinks]  = React.useState({});
      const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
      const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
+     const [newReview, setNewReview] = React.useState(undefined);
     const [state, setState] = React.useState({
         degree: '',
         isLoading: true,
@@ -67,6 +68,7 @@ function App() {
             if (jwtToken !== null){
                 console.log('login successful', jwtToken)
                 sessionStorage.setItem('jwtToken', jwtToken);
+                sessionStorage.setItem('username', state.username);
                 setState({isAuthenticated: true})
             }
         })).catch(() => {
@@ -80,6 +82,7 @@ function App() {
       }
       const logout = () => {
         sessionStorage.removeItem('jwtToken');
+        sessionStorage.removeItem('username')
         console.log('logout');
         setState({isAuthenticated: false})
        history.push('/');
@@ -102,7 +105,8 @@ function App() {
             <Routes isAuthenticated={state.isAuthenticated} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
-             setSearchTerm={setSearchTerm} setLocation={setLocation} searchTerm={searchTerm} location={location}/>
+             setSearchTerm={setSearchTerm} setLocation={setLocation} 
+             searchTerm={searchTerm} location={location} newReview={newReview} setNewReview={setNewReview}/>
 
         </>)
 }

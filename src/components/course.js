@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
 import { SimpleRating } from './simple-rating';
 import moment from 'moment';
+import history from './history';
 
 
 const API_URL = 'http://localhost:8080/api/';
 
-export const Course = () => {
+export const Course = ({newReview, setNewReview}) => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
@@ -20,7 +20,7 @@ export const Course = () => {
                 console.log('programs',result);
             });
 
-    }, [id])
+    }, [id, newReview])
 
     React.useEffect(()=> {
 
@@ -30,8 +30,14 @@ export const Course = () => {
                 console.log('reviews',result);
               
             });
-    }, [id])
+    }, [id, newReview])
 
+    const handleReview = () => {
+        setNewReview = setNewReview({ rating: 1,
+            reviewText: '',
+            username: ''});
+        history.push('/' + id + '/reviews');
+    }
 
 
 
@@ -72,9 +78,11 @@ export const Course = () => {
                 <Typography variant='h6'>Student reviews</Typography>
                </Box>
                </Grid>
-               <Box>
+               {/* <Box>
                <Button  component={RouterLink} to={ '/' + id + '/reviews'} color='primary' variant='contained'>Add a Review</Button>
-               </Box>
+               </Box> */}
+
+                <Button  color='primary' variant='contained' onClick={handleReview}>Add a Review</Button>
                </Grid>
                
                    { reviews && reviews.map((review) => {

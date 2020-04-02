@@ -25,19 +25,12 @@ const useStyles = makeStyles(theme => ({
   }));
   
 
-export const Review = () => {
+export const Review = ({newReview, setNewReview}) => {
     const classes = useStyles();
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
-    const [review, setReview] = React.useState({
-        rating: 1,
-        reviewText: '',
-        username: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME),
-    });
-    
-
     const handleChange = (event) => {
-        setReview({...review, [event.target.name]: event.target.value});
+        setNewReview({...newReview, [event.target.name]: event.target.value});
     }
     React.useEffect(() => {
         fetch(`${API_URL}courses/${id}`).then(
@@ -47,80 +40,64 @@ export const Review = () => {
             })
     }, [id])
 
+    const addReviewToCourse= ((courseReviewLink)=> {
+        fetch(courseReviewLink,{
+            method: 'PUT',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('jwtToken'),
+                'Content-Type': 'text/uri-list'}),
+            body: course._links.self.href
+        }).then( resource2 => {
+             console.log("added review resource to course: " , resource2)
+            })
+        .catch(() => {
+            console.log('failed to add review resource to courses')
+        })
+    })
+
+
+    const addReviewToUser = ((userReviewLink) => {
+        fetch(userReviewLink,{
+            method: 'PUT',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('jwtToken'),
+                'Content-Type': 'text/uri-list'}),
+            body:  sessionStorage.getItem('reviewLink')
+            }).
+        then((resource1) => {
+             console.log("added review resource to user: " , resource1)
+            })
+        .catch(() => {
+            console.log('failed to add review resource to users')
+        })
+
+
+    })
+
 
     const addReview = () => {
-        course.totalReviews = 1 + course.totalReviews;
-        course.rating = Math.ceil((course.rating + review.rating)/ (1.0 * course.totalReviews));
+        setNewReview({username: sessionStorage.getItem('username')})
         const headers = new Headers({
-            'Authorization' : sessionStorage.getItem('token'),
+            'Authorization' : sessionStorage.getItem('jwtToken'),
             'Content-Type': 'application/json'  
         })
-        let reviewResponse={}; 
         
         // update course
-        fetch(course._links.self.href, {
-            method: 'PATCH',
-            headers: headers,
-            body: JSON.stringify(course)
-        }).then(response => {
-            return response.json();
-        }).then(() =>{
-        console.log("coourse updated");
-        }
-        ).catch(() => {
-            console.log("cannot update course")
-        })
-
+        
         fetch(`${API_URL}reviews`,{
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(review)}
+            body: JSON.stringify(newReview)}
 
-            ).then(response => {
-                return response.json()}).then( (result) => {
-                    console.log('second result', result)
-                    reviewResponse = result;
-                    fetch(result._links.user.href,{
-                        method: 'PUT',
-                        headers: new Headers({
-                            'Authorization': sessionStorage.getItem('token'),
-                            'Content-Type': 'text/uri-list'}),
-                        body:  sessionStorage.getItem('reviewLink')
-                        }).then(response => {
-                       return  response.json()
-                    }).
-                    then((resource1) => {
-                         console.log("added review resource to user: " , resource1)
-                        })
-                    .catch(() => {
-                        console.log('failed to add review resource to users')
-                    })
+            ).then(response => {return response.json()})
+                .then( (result) => {
+                 console.log('second result', result)
+                  addReviewToCourse(result._links.course.href)
+                  addReviewToUser(result._links.user.href);            
+                console.log(result)
+                history.push(`/courses/${id}`)    
 
-                    fetch(reviewResponse._links.course.href,{
-                        method: 'PUT',
-                        headers: new Headers({
-                            'Authorization': sessionStorage.getItem('token'),
-                            'Content-Type': 'text/uri-list'}),
-                        body: course._links.self.href
-                    }).then(response => {
-                       return  response.json().then( resource2 => {
-                         console.log("added review resource to course: " , resource2)
-                        })
-                    }
-                    ).catch(() => {
-                        console.log('failed to add review resource to courses')
-                    })
-                    console.log(result)
-                    history.push(`/courses/${id}`)    
-
-                })
-                
-               
-                
-            
-        //setReview(formData);
-    
-       // console.log(currentProgramId);
+                }).catch(()=> console.error("error posting review"))
 
     }
    
@@ -141,7 +118,7 @@ export const Review = () => {
      <FormControl   className={classes.select} variant="outlined" >
         <InputLabel id="demo-simple-select-outlined-label">Rating</InputLabel>
         <Select
-          value={review.rating}
+          value={newReview.rating}
           label="Rating"
           name="rating"
           onChange={handleChange}
@@ -160,7 +137,7 @@ export const Review = () => {
   aria-label="maximum height"
   name="reviewText"
   rowsMin={8}
-  value={review.reviewText}
+  value={newReview.reviewText}
   className={classes.textArea}
   onChange={handleChange}
 />
