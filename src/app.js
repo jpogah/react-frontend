@@ -88,6 +88,9 @@ function App() {
        history.push('/');
       }
     
+      const isUserSignedIn = () => {
+          return sessionStorage.getItem('jwtToken') !== null;
+      }
 
 
     React.useEffect(() => {
@@ -102,7 +105,7 @@ function App() {
         <>
        
             <MenuAppBar isAuthenticated={state.isAuthenticated} login={login} logout={logout} />
-            <Routes isAuthenticated={state.isAuthenticated} state={state} courses={courses} handleChange={handleChange}
+            <Routes isUserSignedIn={isUserSignedIn} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
