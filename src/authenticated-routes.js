@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { isUserLoggedIn } from './components/authentication-service'
 
 export const AuthenticatedRoute = ({isAuthenticated,location,...props}) => {
     

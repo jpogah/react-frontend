@@ -7,10 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
-import { isUserLoggedIn, logout } from './authentication-service';
 import { Button, FormGroup, MenuItem } from '@material-ui/core';
-import {Link} from 'react-router-dom';
-import history from './history';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MenuAppBar = ({state, login, logout}) => {
+export const MenuAppBar = ({isAuthenticated, login, logout}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -48,10 +45,10 @@ export const MenuAppBar = ({state, login, logout}) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-  {state.isAuthenticated ? <Button variant="contained"  color='primary' onClick={logout}>Logout</Button> :
+  {isAuthenticated ? <Button variant="contained"  color='primary' onClick={logout}>Logout</Button> :
   <Button variant="contained" color='primary' onClick={login}>Login</Button>}
           </Typography>
-          {state.isAuthenticated && (
+          {isAuthenticated && (
             <div>
               <IconButton
                 aria-label="account of current user"

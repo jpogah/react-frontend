@@ -19,7 +19,7 @@ export const Home = ({setSearchTerm,setLocation, courses, handleSearch, setState
               {links.first &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.first.href)})}}>&lt;&lt;</Button>)}
              </Grid>
              <Grid item>
-              {links.prev &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.prev.href)})}}>&lt;&lt;</Button>)}
+              {links.prev &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.prev.href)})}}>&lt;</Button>)}
              </Grid>
              <Grid item>
               {links.next &&  (<Button color="primary"  onClick={()=> {setState({url: getUrl(links.next.href)})}}>&gt;</Button>)}

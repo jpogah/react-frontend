@@ -1,4 +1,4 @@
-import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel, TextField, Button, TextareaAutosize, Box, Divider } from '@material-ui/core';
+import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel, Button, TextareaAutosize } from '@material-ui/core';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
@@ -32,7 +32,7 @@ export const Review = () => {
     const [review, setReview] = React.useState({
         rating: 1,
         reviewText: '',
-        username: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
+        username: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME),
     });
     
 

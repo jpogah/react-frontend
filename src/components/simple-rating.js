@@ -3,13 +3,6 @@ import Rating from '@material-ui/lab/Rating';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-const getRating=(reviews)=>{
-  let sum = 0;
-  reviews.map((item) => {
-    sum += item.rating;
-  })
-  return sum/reviews.length;
-}
 
 export const SimpleRating = ({value}) => {
   return (

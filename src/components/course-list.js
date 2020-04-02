@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { Avatar, ListItemAvatar,Grid } from '@material-ui/core';
@@ -31,7 +30,7 @@ export const CourseList = ({ data }) => {
   return (
     <List className={classes.root}>
       {data.map((course) => 
-      <Grid container direction='column'>
+      <Grid container key={course._links.self.href} direction='column'>
         <Grid item xs={8}>
       <ListItem key={course._links.self.href} alignItems="flex-start">
         <ListItemAvatar>
@@ -57,7 +56,7 @@ export const CourseList = ({ data }) => {
         </ListItemLink>
       </ListItem>
       </Grid>
-      <Grid item xs={8}>
+      <Grid  item xs={8}>
       { !course.greRequired && (<Alert variant="outlined" severity="info">
                    <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }

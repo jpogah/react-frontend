@@ -1,9 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, List, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, Divider, ListItem, ListItemText } from '@material-ui/core';
+import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { SimpleRating } from './simple-rating';
-import { fetchData } from './authentication-service';
 import moment from 'moment';
 
 
@@ -13,15 +12,6 @@ export const Course = () => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
-    const [rating, setRating] = React.useState(0);
-    
-    React.useEffect(()=> {
-        const res = fetchData(`${API_URL}course/rating?id=${id}`);
-        console.log('res', res);
-        setRating(res);
-
-    }, [])
-
 
     React.useEffect(() => {
         fetch(`${API_URL}courses/${id}`).then(
@@ -38,7 +28,7 @@ export const Course = () => {
             response => response.json()).then(result => {
                 setReviews(result._embedded.reviews);
                 console.log('reviews',result);
-                setNoOfReviews(reviews.length);
+              
             });
     }, [id])
 
@@ -56,14 +46,14 @@ export const Course = () => {
            </Box>
            </Grid>
            <Grid container item xs={2}/>
-           <Grid item xs={4} justify="flex-end">
+           <Grid item xs={4} >
                <TableContainer>
                    <TableHead>
                        <TableRow>
                        <TableCell><Typography variant="h6">Program Links</Typography></TableCell>
                        </TableRow>
                        </TableHead>
-                       <TableBody>
+                       <TableBody >
                            <TableRow>
                            <TableCell><Typography><Link href={course.website}>{course.programName + ' Website'}</Link></Typography></TableCell>
                            </TableRow>
@@ -88,8 +78,8 @@ export const Course = () => {
                </Grid>
                
                    { reviews && reviews.map((review) => {
-                     return (<Grid container alignitems='center'  spacing={3} >
-                         <Grid item xs={0} />
+                     return (<Grid key={review._links.self.href} container alignitems='center'  spacing={3} >
+                         <Grid item xs={false} />
                        <Grid item><SimpleRating value={review.rating}/></Grid>
                      <Grid item>{review.username}</Grid>
                      <Grid item>{review.reviewText}</Grid>

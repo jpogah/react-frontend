@@ -1,8 +1,6 @@
 import React from 'react';
 import { Routes } from './components/routes';
-import { withCookies} from 'react-cookie';
 import { MenuAppBar } from './components/menu-app-bar';
-import { performJwtAuth, onSuccessfulLogin, isUserLoggedIn } from './components/authentication-service';
 import history from './components/history';
 
 const API_URL = 'http://localhost:8080/';
@@ -100,7 +98,7 @@ function App() {
     return (
         <>
        
-            <MenuAppBar state={state} login={login} logout={logout} />
+            <MenuAppBar isAuthenticated={state.isAuthenticated} login={login} logout={logout} />
             <Routes isAuthenticated={state.isAuthenticated} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
