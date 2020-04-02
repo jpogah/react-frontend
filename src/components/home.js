@@ -4,29 +4,20 @@ import Search from "./search";
 import { Button, Grid } from "@material-ui/core";
 
 
-const getUrl = (href) =>{
-   return href.substr(href.indexOf('/api'));
-}
 
 export const Home = ({setSearchTerm,setLocation, courses, handleSearch, setState, links, searchTerm, location}) => {
     return (
         <>
+        <Grid container direction='column' >
+           <Grid container item alignItems='center' >
          <Search setSearchTerm={setSearchTerm} setLocation={setLocation}  searchTerm={searchTerm} location={location} onSearch={handleSearch} />
-         {courses && courses.length > 0 && (<div><CourseList data={courses} /></div>)}
-         <Grid container>
-             <Grid item xs={4}/>
+         </Grid> 
+         <Grid item  xs={8} direction='column'>
              <Grid item>
-              {links.first &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.first.href)})}}>&lt;&lt;</Button>)}
-             </Grid>
-             <Grid item>
-              {links.prev &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.prev.href)})}}>&lt;</Button>)}
-             </Grid>
-             <Grid item>
-              {links.next &&  (<Button color="primary"  onClick={()=> {setState({url: getUrl(links.next.href)})}}>&gt;</Button>)}
-             </Grid>
-             <Grid item>
-              {links.last &&  (<Button color="primary"  onClick={()=> {setState({url:getUrl(links.last.href)})}}>&gt;&gt;</Button>)}
-             </Grid>
+         {courses && courses.length > 0 && (<div><CourseList setState={setState} links={links} data={courses} /></div>)}
+         </Grid>
+        
+         </Grid>
          </Grid>
          
         </>

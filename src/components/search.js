@@ -24,9 +24,10 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
   
   return (
     <>
+    <Grid container>
       <form noValidate autoComplete="off">
-        <Grid container spacing={1}>
-          <Grid container item xs={2} justify='flex-start'>
+        <Grid container spacing={4}>
+          <Grid container item xs={4}>
             <Box height={1}>
               <TextField
                 label="Search"
@@ -48,7 +49,7 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
             </Box>
           </Grid>
 
-          <Grid container item xs={2} justify="center">
+          <Grid container item xs={4} justify="center">
             <TextField
               placeholder="Location"
               multiline
@@ -67,7 +68,7 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
               onChange={(e)=>{setLocation(e.target.value)} }
             />
           </Grid>
-          <Grid container item xs={1} justify="flex-end">
+          <Grid container item xs={4} justify="flex-end">
 
             <Button variant="contained" color="primary" className={classes.button} onClick={onSearch}>
               Search
@@ -76,7 +77,7 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
           </Grid>
         </Grid>
       </form>
-
+      </Grid>
       <Divider />
     </>
   );
