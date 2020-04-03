@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes } from './components/routes';
 import { MenuAppBar } from './components/menu-app-bar';
 import history from './components/history';
+import { headers } from './constants';
+import { CircularProgress } from '@material-ui/core';
 
 const API_URL = 'http://localhost:8080/';
 function App() {
@@ -21,6 +23,7 @@ function App() {
         name: '',
         rating: '',
         reviewText: '',
+        isLoading: true
     
 
     });
@@ -71,11 +74,11 @@ function App() {
                 sessionStorage.setItem('jwtToken', jwtToken);
                 sessionStorage.setItem('username', state.username);
                 setState({isAuthenticated: true})
+                history.push('/');
             }
         })).catch(() => {
             console.log('error occured on login')
         })
-        history.push('/');
     }
 
     const login = () => {
@@ -95,14 +98,20 @@ function App() {
 
 
     React.useEffect(() => {
-        fetch(state.url).then(
+        fetch(state.url, {
+            headers: headers,
+            method: 'GET'
+        }).then(
             response => response.json()).then(result => {
                 setCourses(result._embedded.courses);
                 setLinks(result._links);
+                setState({isLoading: false})
                 console.log('courses', result);
             })
     }, [state.url])
-    return (
+
+    if (state.isLoading) return (<CircularProgress disableShrink  alignitems='center'/>)
+     else return (
         <>
        
             <MenuAppBar isAuthenticated={state.isAuthenticated} login={login} logout={logout} />

@@ -11,8 +11,8 @@ import { SimpleRating } from './simple-rating';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    maxWidth: '50%',
+    width: '200ch',
+  //  maxWidth: '50%',
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
@@ -57,7 +57,7 @@ export const CourseList = ({ data, links, setState }) => {
         </ListItemLink>
       </ListItem>
       </Grid>
-      <Grid  item xs={8}>
+      <Grid  item xs={2}>
       { !course.greRequired && (<Alert variant="outlined" severity="info">
                    <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }

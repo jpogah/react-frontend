@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, CircularProgress } from '@material-ui/core';
+import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, CircularProgress, ListItemText, List , ListItem} from '@material-ui/core';
 import { SimpleRating } from './simple-rating';
 import moment from 'moment';
 import history from './history';
+import { headers } from '../constants';
 
 
 
@@ -15,7 +16,10 @@ export const Course = ({newReview, setNewReview}) => {
     const [reviews, setReviews]=React.useState([]);
     const [isLoading, setIsLoading]= React.useState(true);
     React.useEffect(() => {
-        fetch(`${API_URL}courses/${id}`).then(
+        fetch(`${API_URL}courses/${id}`, {
+            method: 'GET',
+            headers: headers
+        }).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 setIsLoading(false)
@@ -26,7 +30,12 @@ export const Course = ({newReview, setNewReview}) => {
 
     React.useEffect(()=> {
 
-        fetch(`${API_URL}courses/${id}/reviews`).then(
+        fetch(`${API_URL}courses/${id}/reviews`,
+        {
+            method: 'GET',
+            headers: headers
+
+        }).then(
             response => response.json()).then(result => {
                 setReviews(result._embedded.reviews);
                 console.log('reviews',result);
@@ -42,14 +51,18 @@ export const Course = ({newReview, setNewReview}) => {
   if (isLoading) return (<Grid alignContent='center'><CircularProgress disableShrink  alignitems='center'/></Grid>)
   else return  (
         <>
-        <Grid container spacing={10}>
+        <Grid container  spacing={10}>
             <Grid container item xs={6}>
           <Box>
            <Typography variant="h6">{course.programName}</Typography><SimpleRating value={course.rating}/>
+           <List>
           {course.programDetails.map(( section, index) => {
-              return <Typography key={index} variant="body2">{section}</Typography>
+              return (<ListItem>
+                  <ListItemText primary={section}></ListItemText>
+              </ListItem>)
 
           })} 
+          </List>
            </Box>
            </Grid>
            <Grid container item xs={2}/>

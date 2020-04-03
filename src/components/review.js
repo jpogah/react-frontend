@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
 import { USER_NAME_SESSION_ATTRIBUTE_NAME } from './authentication-service';
+import { headers } from '../constants';
 
 const API_URL = 'http://localhost:8080/api/';
 const useStyles = makeStyles(theme => ({
@@ -33,7 +34,10 @@ export const Review = ({newReview, setNewReview}) => {
         setNewReview({...newReview, [event.target.name]: event.target.value});
     }
     React.useEffect(() => {
-        fetch(`${API_URL}courses/${id}`).then(
+        fetch(`${API_URL}courses/${id}`, {
+            headers: headers,
+            method: 'GET'
+        }).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 console.log('programs',result);
@@ -43,9 +47,7 @@ export const Review = ({newReview, setNewReview}) => {
     const addReviewToCourse= ((courseReviewLink)=> {
         fetch(courseReviewLink,{
             method: 'PUT',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('jwtToken'),
-                'Content-Type': 'text/uri-list'}),
+            headers: headers,
             body: course._links.self.href
         }).then( resource2 => {
              console.log("added review resource to course: " , resource2)
@@ -59,9 +61,7 @@ export const Review = ({newReview, setNewReview}) => {
     const addReviewToUser = ((userReviewLink) => {
         fetch(userReviewLink,{
             method: 'PUT',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('jwtToken'),
-                'Content-Type': 'text/uri-list'}),
+            headers: headers,
             body:  sessionStorage.getItem('reviewLink')
             }).
         then((resource1) => {
@@ -76,11 +76,8 @@ export const Review = ({newReview, setNewReview}) => {
 
 
     const addReview = () => {
-        setNewReview({username: sessionStorage.getItem('username')})
-        const headers = new Headers({
-            'Authorization' : sessionStorage.getItem('jwtToken'),
-            'Content-Type': 'application/json'  
-        })
+        newReview.username = sessionStorage.getItem('username');
+        console.log('username', sessionStorage.getItem('username'));
         
         // update course
         

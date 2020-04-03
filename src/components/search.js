@@ -8,12 +8,14 @@ import { Divider, Button, Grid, Box} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   textField: {
-    height: 40,
-    marginBottom: 10,
+    height: 60,
+   marginBottom: 10,
+   marginRight: 40,
+   width: '50ch',
  
   },
   button: {
-    height: 40,
+   height: 58,
     marginBottom: 10
   },
 }));
@@ -24,10 +26,7 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
   
   return (
     <>
-    <Grid container>
-      <form noValidate autoComplete="off">
-        <Grid container spacing={4}>
-          <Grid container item xs={4}>
+   
             <Box height={1}>
               <TextField
                 label="Search"
@@ -46,10 +45,7 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
                 }}
                 onChange={(e) => { setSearchTerm(e.target.value)}}
               />
-            </Box>
-          </Grid>
-
-          <Grid container item xs={4} justify="center">
+            </Box> 
             <TextField
               placeholder="Location"
               multiline
@@ -67,17 +63,10 @@ export default function Search({ setSearchTerm,setLocation,searchTerm, location,
               }}
               onChange={(e)=>{setLocation(e.target.value)} }
             />
-          </Grid>
-          <Grid container item xs={4} justify="flex-end">
 
             <Button variant="contained" color="primary" className={classes.button} onClick={onSearch}>
               Search
             </Button>
-
-          </Grid>
-        </Grid>
-      </form>
-      </Grid>
       <Divider />
     </>
   );
