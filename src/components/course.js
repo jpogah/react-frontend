@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button } from '@material-ui/core';
+import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody, TableRow, Link, Button, CircularProgress } from '@material-ui/core';
 import { SimpleRating } from './simple-rating';
 import moment from 'moment';
 import history from './history';
+
 
 
 const API_URL = 'http://localhost:8080/api/';
@@ -12,15 +13,16 @@ export const Course = ({newReview, setNewReview}) => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
-
+    const [isLoading, setIsLoading]= React.useState(true);
     React.useEffect(() => {
         fetch(`${API_URL}courses/${id}`).then(
             response => response.json()).then(result => {
                 setCourse(result);
+                setIsLoading(false)
                 console.log('programs',result);
             });
 
-    }, [id, newReview])
+    }, [])
 
     React.useEffect(()=> {
 
@@ -30,25 +32,24 @@ export const Course = ({newReview, setNewReview}) => {
                 console.log('reviews',result);
               
             });
-    }, [id, newReview])
-
+    }, [])
+   
     const handleReview = () => {
-        setNewReview = setNewReview({ rating: 1,
-            reviewText: '',
-            username: ''});
-        history.push('/' + id + '/reviews');
+        setNewReview = setNewReview({});
+        history.push('/course/' + id + '/reviews');
     }
 
-
-
-
-    return (
+  if (isLoading) return (<Grid alignContent='center'><CircularProgress disableShrink  alignitems='center'/></Grid>)
+  else return  (
         <>
         <Grid container spacing={10}>
             <Grid container item xs={6}>
           <Box>
            <Typography variant="h6">{course.programName}</Typography><SimpleRating value={course.rating}/>
-           <Typography variant="body2">{course.programDetails}</Typography>
+          {course.programDetails.map(( section, index) => {
+              return <Typography key={index} variant="body2">{section}</Typography>
+
+          })} 
            </Box>
            </Grid>
            <Grid container item xs={2}/>

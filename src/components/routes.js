@@ -20,7 +20,7 @@ export const Routes = ({isAuthenticated, state,courses, handleChange, handleSear
         <Switch>
         <Route  exact path="/"  render={(props)=><Home setSearchTerm={setSearchTerm} setLocation={setLocation} searchTerm={searchTerm} location={location} courses={courses}  handleSearch={handleSearch} links={links} setState={setState}  /> } />
         <Route path="/courses/:id"  render={(props)=><Course newReview={newReview} setNewReview={setNewReview} />} />
-       <AuthenticatedRoute isUserSignedIn={isUserSignedIn} path="/:id/reviews"  render={(props)=><Review newReview={newReview} setNewReview={setNewReview} />} />
+       <AuthenticatedRoute isUserSignedIn={isUserSignedIn} path="/course/:id/reviews"  render={(props)=><Review newReview={newReview} setNewReview={setNewReview} />} />
         <Route path='/login' render={(props)=><Login state={state} handleChange={handleChange} handleLogin={handleLogin}/>} />
       </Switch>
         </Router>

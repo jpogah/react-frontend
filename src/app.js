@@ -48,8 +48,9 @@ function App() {
         console.log('before url',state.url)
         searchParam = searchTerm ? `searchTerm=${searchTerm}` : searchParam;
         searchParam = location ? `${searchParam}&location=${location}`: searchParam;
-        setState({ url : searchParam.length === 0 ? API_URL
-        : `${API_URL}api/courses/search/searchBy?${searchParam}`});
+        const url = searchParam.length === 0 ? API_URL: `${API_URL}api/courses/search/searchBy?${searchParam.toLowerCase()}`
+        console.log('new url', url);
+        setState({ url : url});
         console.log('searchparam',searchParam);
         console.log('after url', state.url);
     }
