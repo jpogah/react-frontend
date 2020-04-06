@@ -14,7 +14,7 @@ export const Course = ({newReview, setNewReview}) => {
     const [isLoading, setIsLoading]= React.useState(true);
     React.useEffect(() => {
         fetch(`${API_BASE_URL}/courses/${id}`, {
-            method: 'GET'
+            method: 'GET',
         }).then(
             response => response.json()).then(result => {
                 setCourse(result);
@@ -28,7 +28,8 @@ export const Course = ({newReview, setNewReview}) => {
 
         fetch(`${API_BASE_URL}/courses/${id}/reviews`,
         {
-            method: 'GET'
+            method: 'GET',
+            headers:headers
 
         }).then(
             response => response.json()).then(result => {
@@ -39,10 +40,11 @@ export const Course = ({newReview, setNewReview}) => {
     }, [])
    
     const handleReview = () => {
+        const username = sessionStorage.getItem('username');
         setNewReview = setNewReview({
             rating: 0,
             reviewText: '',
-            username: sessionStorage.getItem('username')
+            username: username
         });
         history.push('/course/' + id + '/reviews');
     }

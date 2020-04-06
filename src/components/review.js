@@ -2,7 +2,7 @@ import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
-import { headers, API_BASE_URL } from '../constants';
+import { headers, API_BASE_URL,headersForAssociationUpdate } from '../constants';
 
 const useStyles = makeStyles(theme => ({
     TextField: {
@@ -24,16 +24,18 @@ const useStyles = makeStyles(theme => ({
   }));
   
 
-export const Review = ({newReview, setNewReview}) => {
+export const Review = () => {
     const classes = useStyles();
     const [course, setCourse] = React.useState({});
+    const [rating, setRating] = React.useState(1);
+    const [reviewText, setReviewText] = React.useState('');
+    
     const { id } = useParams();
-    const handleChange = (event) => {
-        setNewReview({...newReview, [event.target.name]: event.target.value});
-    }
+   
     React.useEffect(() => {
         fetch(`${API_BASE_URL}/courses/${id}`, {
-            method: 'GET'
+            method: 'GET',
+            headers: headers
         }).then(
             response => response.json()).then(result => {
                 setCourse(result);
@@ -41,54 +43,66 @@ export const Review = ({newReview, setNewReview}) => {
             })
     }, [id])
 
+    const fetchPut = async(url, data) => {
+        const result = await fetch(url, { headers: headersForAssociationUpdate, method: 'PUT', body: data});
+        console.log("result", result);
+
+    }
     const addReviewToCourse= ((courseReviewLink)=> {
+        console.log('course link',courseReviewLink)
         fetch(courseReviewLink,{
             method: 'PUT',
-            headers: headers,
+            headers: headersForAssociationUpdate,
             body: course._links.self.href
+        }).then(resp=> {
+             return resp.json();
         }).then( resource2 => {
              console.log("added review resource to course: " , resource2)
             })
-        .catch(() => {
-            console.log('failed to add review resource to courses')
-        })
     })
 
 
     const addReviewToUser = ((userReviewLink) => {
+        console.log('review link',userReviewLink)
         fetch(userReviewLink,{
             method: 'PUT',
-            headers: headers,
-            body:  sessionStorage.getItem('reviewLink')
-            }).
-        then((resource1) => {
+            headers: headersForAssociationUpdate,
+            body:  sessionStorage.getItem('userLink')
+            }).then(resp => {
+                return resp.json();
+            })
+        .then((resource1) => {
              console.log("added review resource to user: " , resource1)
             })
-        .catch(() => {
-            console.log('failed to add review resource to users')
-        })
-
 
     })
 
 
     const addReview = () => {
        // newReview.username = sessionStorage.getItem('username');
-        console.log('username', sessionStorage.getItem('username'));
-        console.log('reviews', newReview);
+       const username = sessionStorage.getItem('username');
+        console.log('username', username );
+        const review = {
+            'rating' : rating,
+            'reviewText': reviewText,
+            'username': username
+        }
+        console.log('reviews', review);
         
         // update course
         
         fetch(`${API_BASE_URL}/reviews`,{
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(newReview)}
+            body: JSON.stringify(review)}
 
             ).then(response => {return response.json()})
                 .then( (result) => {
                  console.log('second result', result)
-                  addReviewToCourse(result._links.course.href)
-                  addReviewToUser(result._links.user.href);            
+                 fetchPut(result._links.course.href, course._links.self.href);
+                 fetchPut(result._links.user.href, sessionStorage.getItem('userLink'));
+                 // addReviewToCourse(result._links.course.href)
+                 // addReviewToUser(result._links.user.href);            
                 console.log(result)
                 history.push(`/courses/${id}`)    
 
@@ -113,10 +127,10 @@ export const Review = ({newReview, setNewReview}) => {
      <FormControl   className={classes.select} variant="outlined" >
         <InputLabel id="demo-simple-select-outlined-label">Rating</InputLabel>
         <Select
-          value={newReview.rating}
+          value={rating}
           label="Rating"
           name="rating"
-          onChange={handleChange}
+          onChange={(e) => {setRating(e.target.value)}}
         >
           <MenuItem value={1}>1</MenuItem>
           <MenuItem value={2}>2</MenuItem>
@@ -132,9 +146,9 @@ export const Review = ({newReview, setNewReview}) => {
   aria-label="maximum height"
   name="reviewText"
   rowsMin={8}
-  value={newReview.reviewText}
+  value={reviewText}
   className={classes.textArea}
-  onChange={handleChange}
+  onChange={(e)=> {setReviewText(e.target.value)} }
 />
       </Grid>
 

@@ -10,10 +10,10 @@ function App() {
      const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
      const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
      const [newReview, setNewReview] = React.useState(undefined);
+     const [isAuthenticated, setIsAuthenticated] = React.useState(sessionStorage.getItem('jwtToken') !== null);
     const [state, setState] = React.useState({
         degree: '',
         isLoading: true,
-        isAuthenticated: false,
         url: `${API_BASE_URL}/courses`,
         username: '',
         password: '',
@@ -70,14 +70,26 @@ function App() {
             const jwtToken = response.headers.get('Authorization');
             if (jwtToken !== null){
                 console.log('login successful', jwtToken)
+                setIsAuthenticated(true);
                 sessionStorage.setItem('jwtToken', jwtToken);
                 sessionStorage.setItem('username', state.username);
-                setState({isAuthenticated: true})
+                getUser(state.username);
                 history.push('/');
             }
         })).catch(() => {
             console.log('error occured on login')
         })
+    }
+
+    const getUser= (username) => {
+        fetch(`${API_BASE_URL}/users?username=${username}`,{
+            headers: headers,
+            method: 'GET'
+        }).then( (resp) => {
+            return resp.json()
+        }).then((result) => {
+         sessionStorage.setItem('userLink', result._embedded.users[0]._links.self.href);
+        }).catch(() => console.error('error occured while fetching user'));
     }
 
     const login = () => {
@@ -87,18 +99,15 @@ function App() {
         sessionStorage.removeItem('jwtToken');
         sessionStorage.removeItem('username')
         console.log('logout');
-        setState({isAuthenticated: false})
+       setIsAuthenticated(false);
        history.push('/');
       }
-    
-      const isUserSignedIn = () => {
-          return sessionStorage.getItem('jwtToken') !== null;
-      }
+
 
 
     React.useEffect(() => {
         fetch(state.url, {
-            method: 'GET'
+            method: 'GET',
         }).then(
             response => response.json()).then(result => {
                 setCourses(result._embedded.courses);
@@ -112,8 +121,8 @@ function App() {
      else return (
         <>
        
-            <MenuAppBar isAuthenticated={state.isAuthenticated} login={login} logout={logout} />
-            <Routes isUserSignedIn={isUserSignedIn} state={state} courses={courses} handleChange={handleChange}
+            <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} />
+            <Routes isUserSignedIn={isAuthenticated} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
