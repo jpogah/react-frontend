@@ -14,13 +14,13 @@ import { Login } from './login';
 
 
 export const Routes = ({isAuthenticated, state,courses, handleChange, handleSearch, links, setState,
-   handleLogin, setSearchTerm, setLocation,searchTerm,location, newReview, setNewReview, isUserSignedIn }) => {
+   handleLogin, setSearchTerm, setLocation,searchTerm,location }) => {
     return (
         <Router history={history}>
         <Switch>
         <Route  exact path="/"  render={(props)=><Home setSearchTerm={setSearchTerm} setLocation={setLocation} searchTerm={searchTerm} location={location} courses={courses}  handleSearch={handleSearch} links={links} setState={setState}  /> } />
-        <Route path="/courses/:id"  render={(props)=><Course newReview={newReview} setNewReview={setNewReview} />} />
-       <Route  path="/course/:id/reviews"  render={(props)=><Review newReview={newReview} setNewReview={setNewReview} />} />
+        <Route path="/courses/:id"  render={(props)=><Course />} />
+       <AuthenticatedRoute  path="/course/:id/reviews" isAuthenticated={isAuthenticated}  render={(props)=><Review/>} />
         <Route path='/login' render={(props)=><Login state={state} handleChange={handleChange} handleLogin={handleLogin}/>} />
       </Switch>
         </Router>

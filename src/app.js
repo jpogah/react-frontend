@@ -122,7 +122,7 @@ function App() {
         <>
        
             <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} />
-            <Routes isUserSignedIn={isAuthenticated} state={state} courses={courses} handleChange={handleChange}
+            <Routes isAuthenticated={isAuthenticated} state={state} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 

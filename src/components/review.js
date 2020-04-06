@@ -51,7 +51,7 @@ export const Review = () => {
     const addReviewToCourse= ((courseReviewLink)=> {
         console.log('course link',courseReviewLink)
         fetch(courseReviewLink,{
-            method: 'PUT',
+            method: 'PATCH',
             headers: headersForAssociationUpdate,
             body: course._links.self.href
         }).then(resp=> {
@@ -65,7 +65,7 @@ export const Review = () => {
     const addReviewToUser = ((userReviewLink) => {
         console.log('review link',userReviewLink)
         fetch(userReviewLink,{
-            method: 'PUT',
+            method: 'PATCH',
             headers: headersForAssociationUpdate,
             body:  sessionStorage.getItem('userLink')
             }).then(resp => {
@@ -78,7 +78,7 @@ export const Review = () => {
     })
 
 
-    const addReview = () => {
+    const addReview = async () => {
        // newReview.username = sessionStorage.getItem('username');
        const username = sessionStorage.getItem('username');
         console.log('username', username );
@@ -90,23 +90,22 @@ export const Review = () => {
         console.log('reviews', review);
         
         // update course
-        
-        fetch(`${API_BASE_URL}/reviews`,{
+
+        const response = await fetch(`${API_BASE_URL}/reviews`,{
             method: 'POST',
             headers: headers,
             body: JSON.stringify(review)}
 
-            ).then(response => {return response.json()})
-                .then( (result) => {
-                 console.log('second result', result)
-                 fetchPut(result._links.course.href, course._links.self.href);
-                 fetchPut(result._links.user.href, sessionStorage.getItem('userLink'));
-                 // addReviewToCourse(result._links.course.href)
-                 // addReviewToUser(result._links.user.href);            
-                console.log(result)
-                history.push(`/courses/${id}`)    
+            );
+        const result = await response.json();
+        
+        console.log(result);
+        if (response.ok){
 
-                }).catch(()=> console.error("error posting review"))
+            fetchPut(result._links.course.href, course._links.self.href);
+            fetchPut(result._links.user.href, sessionStorage.getItem('userLink'));
+            history.push('/courses/' + id);
+        }
 
     }
    

@@ -29,7 +29,6 @@ export const Course = ({newReview, setNewReview}) => {
         fetch(`${API_BASE_URL}/courses/${id}/reviews`,
         {
             method: 'GET',
-            headers:headers
 
         }).then(
             response => response.json()).then(result => {
@@ -40,12 +39,6 @@ export const Course = ({newReview, setNewReview}) => {
     }, [])
    
     const handleReview = () => {
-        const username = sessionStorage.getItem('username');
-        setNewReview = setNewReview({
-            rating: 0,
-            reviewText: '',
-            username: username
-        });
         history.push('/course/' + id + '/reviews');
     }
 
