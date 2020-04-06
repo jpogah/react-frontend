@@ -2,10 +2,8 @@ import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
-import { USER_NAME_SESSION_ATTRIBUTE_NAME } from './authentication-service';
-import { headers } from '../constants';
+import { headers, API_BASE_URL } from '../constants';
 
-const API_URL = 'http://localhost:8080/api/';
 const useStyles = makeStyles(theme => ({
     TextField: {
       width: '45ch'
@@ -34,8 +32,7 @@ export const Review = ({newReview, setNewReview}) => {
         setNewReview({...newReview, [event.target.name]: event.target.value});
     }
     React.useEffect(() => {
-        fetch(`${API_URL}courses/${id}`, {
-            headers: headers,
+        fetch(`${API_BASE_URL}/courses/${id}`, {
             method: 'GET'
         }).then(
             response => response.json()).then(result => {
@@ -76,12 +73,13 @@ export const Review = ({newReview, setNewReview}) => {
 
 
     const addReview = () => {
-        newReview.username = sessionStorage.getItem('username');
+       // newReview.username = sessionStorage.getItem('username');
         console.log('username', sessionStorage.getItem('username'));
+        console.log('reviews', newReview);
         
         // update course
         
-        fetch(`${API_URL}reviews`,{
+        fetch(`${API_BASE_URL}/reviews`,{
             method: 'POST',
             headers: headers,
             body: JSON.stringify(newReview)}

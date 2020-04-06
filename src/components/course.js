@@ -4,11 +4,8 @@ import { Box, Typography, Grid, TableHead, TableContainer, TableCell, TableBody,
 import { SimpleRating } from './simple-rating';
 import moment from 'moment';
 import history from './history';
-import { headers } from '../constants';
+import { headers, API_BASE_URL } from '../constants';
 
-
-
-const API_URL = 'http://localhost:8080/api/';
 
 export const Course = ({newReview, setNewReview}) => {
     const [course, setCourse] = React.useState({});
@@ -16,9 +13,8 @@ export const Course = ({newReview, setNewReview}) => {
     const [reviews, setReviews]=React.useState([]);
     const [isLoading, setIsLoading]= React.useState(true);
     React.useEffect(() => {
-        fetch(`${API_URL}courses/${id}`, {
-            method: 'GET',
-            headers: headers
+        fetch(`${API_BASE_URL}/courses/${id}`, {
+            method: 'GET'
         }).then(
             response => response.json()).then(result => {
                 setCourse(result);
@@ -30,10 +26,9 @@ export const Course = ({newReview, setNewReview}) => {
 
     React.useEffect(()=> {
 
-        fetch(`${API_URL}courses/${id}/reviews`,
+        fetch(`${API_BASE_URL}/courses/${id}/reviews`,
         {
-            method: 'GET',
-            headers: headers
+            method: 'GET'
 
         }).then(
             response => response.json()).then(result => {
@@ -44,7 +39,11 @@ export const Course = ({newReview, setNewReview}) => {
     }, [])
    
     const handleReview = () => {
-        setNewReview = setNewReview({});
+        setNewReview = setNewReview({
+            rating: 0,
+            reviewText: '',
+            username: sessionStorage.getItem('username')
+        });
         history.push('/course/' + id + '/reviews');
     }
 
@@ -92,11 +91,7 @@ export const Course = ({newReview, setNewReview}) => {
                 <Typography variant='h6'>Student reviews</Typography>
                </Box>
                </Grid>
-               {/* <Box>
-               <Button  component={RouterLink} to={ '/' + id + '/reviews'} color='primary' variant='contained'>Add a Review</Button>
-               </Box> */}
-
-                <Button  color='primary' variant='contained' onClick={handleReview}>Add a Review</Button>
+               <Button  color='primary' variant='contained' onClick={handleReview}>Add a Review</Button>
                </Grid>
                
                    { reviews && reviews.map((review) => {

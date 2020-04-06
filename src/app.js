@@ -2,10 +2,9 @@ import React from 'react';
 import { Routes } from './components/routes';
 import { MenuAppBar } from './components/menu-app-bar';
 import history from './components/history';
-import { headers } from './constants';
+import { headers, API_BASE_URL } from './constants';
 import { CircularProgress } from '@material-ui/core';
 
-const API_URL = 'http://localhost:8080/';
 function App() {
      const [links , setLinks]  = React.useState({});
      const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
@@ -15,7 +14,7 @@ function App() {
         degree: '',
         isLoading: true,
         isAuthenticated: false,
-        url: 'http://localhost:8080/api/courses',
+        url: `${API_BASE_URL}/courses`,
         username: '',
         password: '',
         hasLoginFailed: false,
@@ -51,7 +50,7 @@ function App() {
         console.log('before url',state.url)
         searchParam = searchTerm ? `searchTerm=${searchTerm}` : searchParam;
         searchParam = location ? `${searchParam}&location=${location}`: searchParam;
-        const url = searchParam.length === 0 ? API_URL: `${API_URL}api/courses/search/searchBy?${searchParam.toLowerCase()}`
+        const url = searchParam.length === 0 ? state.url: `${API_BASE_URL}/courses/search/searchBy?${searchParam.toLowerCase()}`
         console.log('new url', url);
         setState({ url : url});
         console.log('searchparam',searchParam);
@@ -64,7 +63,7 @@ function App() {
             'userName': state.username,
             'password': state.password
         }
-        fetch(`${API_URL}login`, {
+        fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
             body: JSON.stringify(user)
         }).then((response => {
@@ -99,7 +98,6 @@ function App() {
 
     React.useEffect(() => {
         fetch(state.url, {
-            headers: headers,
             method: 'GET'
         }).then(
             response => response.json()).then(result => {
