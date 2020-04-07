@@ -61,7 +61,7 @@ export const CourseList = ({ data, links, setCurrentUrl }) => {
       { !course.greRequired && (<Alert variant="outlined" severity="info">
                    <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }
-              <SimpleRating value={course.rating}/>
+              <SimpleRating value={course.averageReview}/>
       </Grid>
       </Grid>
       )}

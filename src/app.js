@@ -116,6 +116,7 @@ function App() {
         fetch(currentUrl).then(
             response => response.json()).then(result => {
              setCourses(result._embedded.courses);
+             sessionStorage.setItem('courses', result._embedded.courses );
                 setLinks(result._links);
                 setState({isLoading: false})
                 console.log('courses', result);
@@ -131,7 +132,7 @@ function App() {
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
-             searchTerm={searchTerm} location={location} />
+             searchTerm={searchTerm} location={location}  setCourses={setCourses}/>
 
         </>)
 }

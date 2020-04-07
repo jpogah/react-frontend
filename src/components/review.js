@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
 import { headers, API_BASE_URL,headersForAssociationUpdate } from '../constants';
+import { CourseList } from './course-list';
 
 const useStyles = makeStyles(theme => ({
     TextField: {
@@ -24,24 +25,21 @@ const useStyles = makeStyles(theme => ({
   }));
   
 
-export const Review = () => {
+export const Review = ({courses,setCourses}) => {
     const classes = useStyles();
+    const  courses_local = React.useState(courses || sessionStorage.getItem('localStorage') )
     const [course, setCourse] = React.useState({});
     const [rating, setRating] = React.useState(1);
     const [reviewText, setReviewText] = React.useState('');
+
     
     const { id } = useParams();
    
     React.useEffect(() => {
-        fetch(`${API_BASE_URL}/courses/${id}`, {
-            method: 'GET',
-            headers: headers
-        }).then(
-            response => response.json()).then(result => {
-                setCourse(result);
-                console.log('programs',result);
-            })
-    }, [id])
+            const getCourse = courses.filter(c =>  (c.id == id) )[0];
+                setCourse(getCourse);
+               // console.log('programs',result);
+            }, [id])
 
     const fetchPut = async(url, data) => {
         const result = await fetch(url, { headers: headersForAssociationUpdate, method: 'PUT', body: data});
@@ -103,6 +101,24 @@ export const Review = () => {
 
             fetchPut(result._links.course.href, course._links.self.href);
             fetchPut(result._links.user.href, sessionStorage.getItem('userLink'));
+            // update course
+            course.rating = review.rating;
+           const courseUpdateResp = await fetch(course._links.self.href,{
+                method: 'PUT',
+                headers: new Headers ({
+                    'Content-Type': 'application/json' 
+                }),
+                body: JSON.stringify(course)
+            });
+            if (courseUpdateResp.ok){
+                console.log("course updated");
+                const newCourses = courses.map( m => {
+                    if ( m.id == course.id){
+                        m = course;
+                    }
+                })
+                setCourses(newCourses);
+            }
             history.push('/courses/' + id);
         }
 
