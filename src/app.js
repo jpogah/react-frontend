@@ -3,9 +3,17 @@ import { Routes } from './components/routes';
 import { MenuAppBar } from './components/menu-app-bar';
 import history from './components/history';
 import { headers, API_BASE_URL } from './constants';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    indicator: {
+      marginLeft: '50%',
+      marginTop: '25%'
+    },
+  }));
 
 function App() {
+    const classes = useStyles();
      const [links , setLinks]  = React.useState({});
      const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
      const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
@@ -114,7 +122,7 @@ function App() {
             })
     }, [currentUrl])
 
-    if (state.isLoading) return (<CircularProgress disableShrink  alignitems='center'/>)
+    if (state.isLoading) return (<div className={classes.indicator}><CircularProgress  size={60} disableShrink alignitems='center'/></div>)
      else return (
         <>
        

@@ -99,7 +99,6 @@ export const Review = () => {
             );
         const result = await response.json();
         
-        console.log(result);
         if (response.ok){
 
             fetchPut(result._links.course.href, course._links.self.href);
