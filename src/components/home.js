@@ -5,7 +5,7 @@ import { Button, Grid } from "@material-ui/core";
 
 
 
-export const Home = ({setSearchTerm,setLocation, courses, handleSearch, setState, links, searchTerm, location}) => {
+export const Home = ({setSearchTerm,setLocation, setCurrentUrl, courses, handleSearch, setState, links, searchTerm, location}) => {
     return (
         <>
         <Grid container direction='column'   >
@@ -14,7 +14,7 @@ export const Home = ({setSearchTerm,setLocation, courses, handleSearch, setState
          </Grid> 
          <Grid item   direction='column'>
              <Grid item>
-         {courses && courses.length > 0 && (<div><CourseList setState={setState} links={links} data={courses} /></div>)}
+         {courses && courses.length > 0 && (<div><CourseList  setCurrentUrl={setCurrentUrl} links={links} data={courses} /></div>)}
          </Grid>
         
          </Grid>

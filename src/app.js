@@ -11,10 +11,10 @@ function App() {
      const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
      const [newReview, setNewReview] = React.useState(undefined);
      const [isAuthenticated, setIsAuthenticated] = React.useState(sessionStorage.getItem('jwtToken') !== null);
+     const [currentUrl, setCurrentUrl] = React.useState(`${API_BASE_URL}/courses`)
     const [state, setState] = React.useState({
         degree: '',
         isLoading: true,
-        url: `${API_BASE_URL}/courses`,
         username: '',
         password: '',
         hasLoginFailed: false,
@@ -52,7 +52,7 @@ function App() {
         searchParam = location ? `${searchParam}&location=${location}`: searchParam;
         const url = searchParam.length === 0 ? state.url: `${API_BASE_URL}/courses/search/searchBy?${searchParam.toLowerCase()}`
         console.log('new url', url);
-        setState({ url : url});
+        setCurrentUrl(url);
         console.log('searchparam',searchParam);
         console.log('after url', state.url);
     }
@@ -106,23 +106,21 @@ function App() {
 
 
     React.useEffect(() => {
-        fetch(state.url, {
-            method: 'GET',
-        }).then(
+        fetch(currentUrl).then(
             response => response.json()).then(result => {
-                setCourses(result._embedded.courses);
+                dispatchCourses({type: 'SET_COURSES', payload: result._embedded.courses})
                 setLinks(result._links);
                 setState({isLoading: false})
                 console.log('courses', result);
             })
-    }, [state.url])
+    }, [currentUrl])
 
     if (state.isLoading) return (<CircularProgress disableShrink  alignitems='center'/>)
      else return (
         <>
        
             <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} />
-            <Routes isAuthenticated={isAuthenticated} state={state} courses={courses} handleChange={handleChange}
+            <Routes isAuthenticated={isAuthenticated} state={state}  setCurrentUrl={setCurrentUrl} courses={courses} dispatchhandleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 

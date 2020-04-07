@@ -24,7 +24,7 @@ function ListItemLink(props) {
   return <ListItem button component={Link} {...props} />;
 }
 
-export const CourseList = ({ data, links, setState }) => {
+export const CourseList = ({ data, links, setCurrentUrl }) => {
   const classes = useStyles();
 
   return (
@@ -67,14 +67,14 @@ export const CourseList = ({ data, links, setState }) => {
       )}
     </List>
     <Grid>
-     {links.first &&  (<Button color="primary"  onClick={()=> {setState({url:links.first.href})}}>&lt;&lt;</Button>)}
+     {links.first &&  (<Button color="primary"  onClick={()=> {setCurrentUrl(links.first.href)}}>&lt;&lt;</Button>)}
     
-     {links.prev &&  (<Button color="primary"  onClick={()=> {setState({url:links.prev.href})}}>&lt;</Button>)}
+     {links.prev &&  (<Button color="primary"  onClick={()=> {setCurrentUrl(links.prev.href)}}>&lt;</Button>)}
     
     
-     {links.next &&  (<Button color="primary"  onClick={()=> {setState({url: links.next.href})}}>&gt;</Button>)}
+     {links.next &&  (<Button color="primary"  onClick={()=> {setCurrentUrl(links.next.href)}}>&gt;</Button>)}
     
-     {links.last &&  (<Button color="primary"  onClick={()=> {setState({url:links.last.href})}}>&gt;&gt;</Button>)}
+     {links.last &&  (<Button color="primary"  onClick={()=> {setCurrentUrl(links.last.href)}}>&gt;&gt;</Button>)}
      </Grid>
      </>
     
