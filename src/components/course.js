@@ -7,15 +7,13 @@ import history from './history';
 import { headers, API_BASE_URL } from '../constants';
 
 
-export const Course = ({newReview, setNewReview}) => {
+export const Course = () => {
     const [course, setCourse] = React.useState({});
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
     const [isLoading, setIsLoading]= React.useState(true);
     React.useEffect(() => {
-        fetch(`${API_BASE_URL}/courses/${id}`, {
-            method: 'GET',
-        }).then(
+        fetch(`${API_BASE_URL}/courses/${id}`).then(
             response => response.json()).then(result => {
                 setCourse(result);
                 setIsLoading(false)

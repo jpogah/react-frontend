@@ -9,7 +9,7 @@ function App() {
      const [links , setLinks]  = React.useState({});
      const [location, setLocation] = React.useState( localStorage.getItem('location') || '');
      const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('searchTerm') || '');
-     const [newReview, setNewReview] = React.useState(undefined);
+     const [courses, setCourses] = React.useState([]);
      const [isAuthenticated, setIsAuthenticated] = React.useState(sessionStorage.getItem('jwtToken') !== null);
      const [currentUrl, setCurrentUrl] = React.useState(`${API_BASE_URL}/courses`)
     const [state, setState] = React.useState({
@@ -27,7 +27,6 @@ function App() {
 
     });
 
-    const [courses, setCourses] = React.useState([]);
     const handleChange = (event) => {
         const value = event.target.value;
         setState({
@@ -108,7 +107,7 @@ function App() {
     React.useEffect(() => {
         fetch(currentUrl).then(
             response => response.json()).then(result => {
-                dispatchCourses({type: 'SET_COURSES', payload: result._embedded.courses})
+             setCourses(result._embedded.courses);
                 setLinks(result._links);
                 setState({isLoading: false})
                 console.log('courses', result);
@@ -120,11 +119,11 @@ function App() {
         <>
        
             <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} />
-            <Routes isAuthenticated={isAuthenticated} state={state}  setCurrentUrl={setCurrentUrl} courses={courses} dispatchhandleChange={handleChange}
+            <Routes isAuthenticated={isAuthenticated} state={state}  setCurrentUrl={setCurrentUrl} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
-             searchTerm={searchTerm} location={location} newReview={newReview} setNewReview={setNewReview}/>
+             searchTerm={searchTerm} location={location} />
 
         </>)
 }

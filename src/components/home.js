@@ -5,7 +5,7 @@ import { Button, Grid } from "@material-ui/core";
 
 
 
-export const Home = ({setSearchTerm,setLocation, setCurrentUrl, courses, handleSearch, setState, links, searchTerm, location}) => {
+export const Home = ({setSearchTerm,setLocation, setCurrentUrl, courses, handleSearch, links, searchTerm, location}) => {
     return (
         <>
         <Grid container direction='column'   >
