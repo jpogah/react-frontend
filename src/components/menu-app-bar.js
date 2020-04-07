@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import { Button, FormGroup, MenuItem } from '@material-ui/core';
+import history from './history';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MenuAppBar = ({isAuthenticated, login, logout}) => {
+export const MenuAppBar = ({isAuthenticated, login, logout, signup}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -48,7 +49,9 @@ export const MenuAppBar = ({isAuthenticated, login, logout}) => {
   {isAuthenticated ? <Button variant="contained"  color='primary' onClick={logout}>Logout</Button> :
   <Button variant="contained" color='primary' onClick={login}>Login</Button>}
           </Typography>
-          {isAuthenticated && (
+          <Button variant='contained' color='primary' className={classes.menuButton}>Funding Opportunities</Button>
+          <Button variant='contained'  color='primary' className={classes.menuButton}  onClick={()=> history.push('/')}>Graduate Programs</Button>
+          {isAuthenticated ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -78,7 +81,7 @@ export const MenuAppBar = ({isAuthenticated, login, logout}) => {
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
-          )}
+          ) : <Button variant="contained" color='primary' onClick={signup}>Signup</Button>}
         </Toolbar>
       </AppBar>
     </div>

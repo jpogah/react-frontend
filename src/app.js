@@ -27,6 +27,7 @@ function App() {
         password: '',
         hasLoginFailed: false,
         showLoginSuccessMsg: false,
+        email: '',
         name: '',
         rating: '',
         reviewText: '',
@@ -64,12 +65,34 @@ function App() {
         console.log('after url', state.url);
     }
 
-    const handleLogin = ()=> {
-        console.log('username', state.username);
+    const handleSignup = () => {
         const user = {
             'userName': state.username,
-            'password': state.password
+            'password': state.password,
+            'email' : state.email
         }
+        console.log(user);
+        fetch(`${API_BASE_URL}/users`, {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json' 
+            }),
+            body: JSON.stringify(user)
+        }).then((response => {
+            if (response.ok){
+                const loginUser = {
+                    'userName': state.username,
+                    'password': state.password,
+                }
+            logingFetchReq(loginUser);
+            }
+            
+        })).catch(() => {
+            console.log('error occured on signup')
+        })
+
+    }
+    const logingFetchReq= (user) => {
         fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
             body: JSON.stringify(user)
@@ -86,6 +109,17 @@ function App() {
         })).catch(() => {
             console.log('error occured on login')
         })
+
+    };
+
+    const handleLogin = ()=> {
+        console.log('username', state.username);
+        const user = {
+            'userName': state.username,
+            'password': state.password
+        }
+        logingFetchReq(user);
+      
     }
 
     const getUser= (username) => {
@@ -99,6 +133,9 @@ function App() {
         }).catch(() => console.error('error occured while fetching user'));
     }
 
+    const signup = () => {
+        history.push('/signup');
+    }
     const login = () => {
         history.push('/login');
       }
@@ -116,7 +153,6 @@ function App() {
         fetch(currentUrl).then(
             response => response.json()).then(result => {
              setCourses(result._embedded.courses);
-             sessionStorage.setItem('courses', result._embedded.courses );
                 setLinks(result._links);
                 setState({isLoading: false})
                 console.log('courses', result);
@@ -127,12 +163,12 @@ function App() {
      else return (
         <>
        
-            <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} />
+            <MenuAppBar isAuthenticated={isAuthenticated} login={login} logout={logout} signup={signup} />
             <Routes isAuthenticated={isAuthenticated} state={state}  setCurrentUrl={setCurrentUrl} courses={courses} handleChange={handleChange}
              handleSearch={handleSearch}
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
-             searchTerm={searchTerm} location={location}  setCourses={setCourses}/>
+             searchTerm={searchTerm} location={location}  setCourses={setCourses} signup={signup} handleSignup={handleSignup}/>
 
         </>)
 }

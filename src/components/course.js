@@ -50,7 +50,7 @@ export const Course = () => {
         <Grid container  spacing={10}>
             <Grid container item xs={6}>
           <Box>
-           <Typography variant="h6">{course.programName}</Typography><SimpleRating value={course.averageReview}/>
+           <Typography variant="h6" color='secondary'>{course.programName}</Typography><SimpleRating value={course.averageReview}/>
            <List>
           {course.programDetails.map(( section, index) => {
               return (<ListItem>

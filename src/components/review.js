@@ -1,4 +1,4 @@
-import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel, Button, TextareaAutosize } from '@material-ui/core';
+import { Typography, MenuItem, Select, FormControl, Grid, makeStyles, InputLabel, Button, TextareaAutosize, CircularProgress } from '@material-ui/core';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import history from './history';
@@ -27,18 +27,24 @@ const useStyles = makeStyles(theme => ({
 
 export const Review = ({courses,setCourses}) => {
     const classes = useStyles();
-    const  courses_local = React.useState(courses || sessionStorage.getItem('localStorage') )
     const [course, setCourse] = React.useState({});
     const [rating, setRating] = React.useState(1);
     const [reviewText, setReviewText] = React.useState('');
+    const [isLoading, setIsLoading] = React.useState(true);
 
     
     const { id } = useParams();
    
     React.useEffect(() => {
-            const getCourse = courses.filter(c =>  (c.id == id) )[0];
-                setCourse(getCourse);
-               // console.log('programs',result);
+            fetch(`${API_BASE_URL}/courses/${id}`).then(
+                resp => {
+                    return resp.json();
+                }
+            ).then( result => {
+                console.log('result', result);
+                setCourse(result);
+                setIsLoading(false);
+            })          
             }, [id])
 
     const fetchPut = async(url, data) => {
@@ -90,8 +96,8 @@ export const Review = ({courses,setCourses}) => {
         // update course
 
         const response = await fetch(`${API_BASE_URL}/reviews`,{
-            method: 'POST',
             headers: headers,
+            method: 'POST',
             body: JSON.stringify(review)}
 
             );
@@ -110,8 +116,8 @@ export const Review = ({courses,setCourses}) => {
                 }),
                 body: JSON.stringify(course)
             });
-            if (courseUpdateResp.ok){
-                console.log("course updated");
+            if (courseUpdateResp.ok && courses){
+                console.log("course updated", courses);
                 const newCourses = courses.map( m => {
                     if ( m.id == course.id){
                         m = course;
@@ -126,8 +132,8 @@ export const Review = ({courses,setCourses}) => {
    
 
 
-
-    return (<>
+    if (isLoading ) return (<Grid alignContent='center'><CircularProgress disableShrink  alignitems='center'/></Grid>)
+   else return (<>
     <Grid container direction='column' alignItems='center' spacing={4}>
     <Grid item>
     <Typography align='left'  variant='h6'>Review {course.programName} at {course.schoolName}</Typography>
