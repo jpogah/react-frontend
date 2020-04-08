@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography, Link } from '@material-ui/core';
+import history from './history';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,7 +53,7 @@ export const Login = ({state, handleChange, handleLogin}) => {
           <Button variant="contained" className={classes.button} color="primary" onClick={handleLogin}>Login</Button>
           </Grid> 
           
-            <Typography>Don't have an account?<Link to='/signup'>Sign Up</Link></Typography>
+            <Typography>Don't have an account?<Link href='/signup' >Sign Up</Link></Typography>
          
       </Grid>
     </form>
