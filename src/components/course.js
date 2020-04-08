@@ -7,6 +7,9 @@ import history from './history';
 import { headers, API_BASE_URL } from '../constants';
 
 const useStyles = makeStyles((theme) => ({
+    grid : {
+        marginBottom: 20
+    }
     
   }));
 
@@ -47,10 +50,10 @@ export const Course = () => {
   if (isLoading) return (<Grid alignContent='center'><CircularProgress disableShrink  alignitems='center'/></Grid>)
   else return  (
         <>
-        <Grid container  spacing={10}>
+        <Grid container  spacing={1}>
             <Grid container item xs={6}>
           <Box>
-           <Typography variant="h6" color='secondary'>{course.programName}</Typography><SimpleRating value={course.averageReview}/>
+           <Typography variant="h6" color='primary'>{course.programName}</Typography><SimpleRating value={course.averageReview}/>
            <List>
           {course.programDetails.map(( section, index) => {
               return (<ListItem>
@@ -82,23 +85,25 @@ export const Course = () => {
                </Grid>
                <Grid>
              </Grid>
-             <Grid container>
-                 <Grid item xs={8}>
-               <Box marginLeft={5}>
+             <Grid container className={classes.grid}>
+                 <Grid item xs={4}>
+               
                 <Typography variant='h6'>Student reviews</Typography>
-               </Box>
+            
                </Grid>
+               <Grid item xs={2}>
                <Button  color='primary' variant='contained' onClick={handleReview}>Add a Review</Button>
+               </Grid>
                </Grid>
                
                    { reviews && reviews.map((review) => {
-                     return (<Grid key={review._links.self.href} container  alignitems='center' spacing={3} >
+                     return (<Grid key={review._links.self.href} container  alignitems='center' spacing={2} >
                          <Divider />
                          <Grid item xs={false} />
                        <SimpleRating value={review.rating}  />
-                     <Grid item>{review.username}</Grid>
-                     <Grid item>{review.reviewText}</Grid>
-                     <Grid item>{moment(review.createdTime).format('MMMM Do YYYY')}</Grid>
+                     <Grid item xs={2}>{review.username}</Grid>
+                     <Grid item xs={2}>{review.reviewText}</Grid>
+                     <Grid item xs={2}>{moment(review.createdTime).format('MMMM Do YYYY')}</Grid>
                      </Grid>)
                    })}
                

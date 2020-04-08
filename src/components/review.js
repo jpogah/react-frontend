@@ -85,6 +85,7 @@ export const Review = ({courses,setCourses}) => {
     const addReview = async () => {
        // newReview.username = sessionStorage.getItem('username');
        const username = sessionStorage.getItem('username');
+       console.log(sessionStorage.getItem('jwtToken'));
         console.log('username', username );
         const review = {
             'rating' : rating,
@@ -96,7 +97,10 @@ export const Review = ({courses,setCourses}) => {
         // update course
 
         const response = await fetch(`${API_BASE_URL}/reviews`,{
-            headers: headers,
+            headers: new Headers({
+                'Authorization' : sessionStorage.getItem('jwtToken'),
+                'Content-Type': 'application/json'  
+            }),
             method: 'POST',
             body: JSON.stringify(review)}
 

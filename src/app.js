@@ -4,6 +4,7 @@ import { MenuAppBar } from './components/menu-app-bar';
 import history from './components/history';
 import { headers, API_BASE_URL } from './constants';
 import { CircularProgress, makeStyles } from '@material-ui/core';
+import { BottomBar } from './components/bottom-bar';
 
 const useStyles = makeStyles((theme) => ({
     indicator: {
@@ -56,8 +57,8 @@ function App() {
     const handleSearch = () => {
         let searchParam = '';
         console.log('before url',state.url)
-        searchParam = searchTerm ? `searchTerm=${searchTerm}` : searchParam;
-        searchParam = location ? `${searchParam}&location=${location}`: searchParam;
+        searchParam = searchTerm ? `searchTerm=${searchTerm.toLowerCase()}` : searchParam;
+        searchParam = location ? `${searchParam}&location=${location.toLowerCase()}`: searchParam;
         const url = searchParam.length === 0 ? currentUrl: `${API_BASE_URL}/courses/search/searchBy?${searchParam}`
         console.log('new url', url);
         setCurrentUrl(url);
@@ -169,7 +170,7 @@ function App() {
              handleLogin={handleLogin} links={links} setState={setState}
              setSearchTerm={setSearchTerm} setLocation={setLocation} 
              searchTerm={searchTerm} location={location}  setCourses={setCourses} signup={signup} handleSignup={handleSignup}/>
-
+           <BottomBar />
         </>)
 }
 

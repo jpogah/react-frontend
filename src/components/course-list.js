@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '200ch',
   //  maxWidth: '50%',
+  marginBottom: '20ch',
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
@@ -32,7 +33,7 @@ export const CourseList = ({ data, links, setCurrentUrl }) => {
     <List className={classes.root}>
       {data.map((course) => 
       <Grid container key={course._links.self.href} direction='column'>
-        <Grid item xs={8}>
+        <Grid item xs={3}>
       <ListItem key={course._links.self.href} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={course.schoolName} src={course.img} />
@@ -40,7 +41,8 @@ export const CourseList = ({ data, links, setCurrentUrl }) => {
         <ListItemLink to={'/courses/' + course._links.self.href.substr(course._links.self.href.lastIndexOf('/') + 1)}>
           <ListItemText component='div'
             primary={<React.Fragment>
-             <Button color='secondary'><Typography>{course.programName}</Typography></Button>
+              
+             <Typography color='primary' nowrap>{course.programName}</Typography>
             </React.Fragment>}
             secondary={
               <React.Fragment>
@@ -60,16 +62,15 @@ export const CourseList = ({ data, links, setCurrentUrl }) => {
       </ListItem>
       </Grid>
       <Grid  item xs={2}>
-      { !course.greRequired && (<Alert variant="outlined" color='primary' severity="info">
-                   <AlertTitle><Typography color='primary'>GRE is not Required</Typography></AlertTitle>
+      { !course.greRequired && (<Alert variant="outlined"  severity="info">
+                   <AlertTitle><Typography>GRE is not Required</Typography></AlertTitle>
               </Alert>) }
               <SimpleRating value={course.averageReview}/>
       </Grid>
       <Divider/>
       </Grid>
       )}
-    </List>
-    <Grid container spacing={2}>
+      <Grid container spacing={2}>
       <Grid item>
      {links.first &&  (<Button color="secondary"  variant='contained' onClick={()=> {setCurrentUrl(links.first.href)}}>First</Button>)}
      </Grid>
@@ -83,6 +84,9 @@ export const CourseList = ({ data, links, setCurrentUrl }) => {
      {links.last &&  (<Button color="secondary"  variant='contained' onClick={()=> {setCurrentUrl(links.last.href)}}>Last</Button>)}
      </Grid>
      </Grid>
+  
+    </List>
+    
      </>
     
   );

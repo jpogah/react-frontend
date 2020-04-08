@@ -46,11 +46,10 @@ export const MenuAppBar = ({isAuthenticated, login, logout, signup}) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-  {isAuthenticated ? <Button variant="contained"  color='primary' onClick={logout}>Logout</Button> :
-  <Button variant="contained" color='primary' onClick={login}>Login</Button>}
+  {isAuthenticated ? <Button   color='secondary' onClick={logout}>Logout</Button> :
+  <Button  color='secondary' onClick={login}>Login</Button>}
           </Typography>
-          <Button variant='contained' color='primary' className={classes.menuButton}>Funding Opportunities</Button>
-          <Button variant='contained'  color='primary' className={classes.menuButton}  onClick={()=> history.push('/')}>Graduate Programs</Button>
+          <Button   color='secondary' className={classes.menuButton}  onClick={()=> history.push('/')}>Graduate Programs</Button>
           {isAuthenticated ? (
             <div>
               <IconButton
@@ -81,7 +80,7 @@ export const MenuAppBar = ({isAuthenticated, login, logout, signup}) => {
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
-          ) : <Button variant="contained" color='primary' onClick={signup}>Signup</Button>}
+          ) : <Button  color='secondary' onClick={signup}>Signup</Button>}
         </Toolbar>
       </AppBar>
     </div>
