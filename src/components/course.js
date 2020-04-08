@@ -5,6 +5,7 @@ import { SimpleRating } from './simple-rating';
 import moment from 'moment';
 import history from './history';
 import { headers, API_BASE_URL } from '../constants';
+import { TuitionDialog } from './tuition-dialog';
 
 const useStyles = makeStyles((theme) => ({
     grid : {
@@ -19,6 +20,15 @@ export const Course = () => {
     const { id } = useParams();
     const [reviews, setReviews]=React.useState([]);
     const [isLoading, setIsLoading]= React.useState(true);
+    const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
     React.useEffect(() => {
         fetch(`${API_BASE_URL}/courses/${id}`).then(
             response => response.json()).then(result => {
@@ -28,6 +38,7 @@ export const Course = () => {
             });
 
     }, [])
+
 
     React.useEffect(()=> {
 
@@ -78,6 +89,12 @@ export const Course = () => {
                            </TableRow>
                            <TableRow>
                            <TableCell><Typography><Link href={course.email}>{course.programName + ' Email'}</Link></Typography></TableCell>
+                           </TableRow>
+                           <TableRow>
+                           <TableCell><Button  color="primary" onClick={handleClickOpen}>
+        Click to see tuition info
+      </Button></TableCell>
+      <TuitionDialog  open={open} schoolName={course.schoolName} handleClose={handleClose} tuitioninfo={course.tuitionCost} />
                            </TableRow>
                        </TableBody>
                    
