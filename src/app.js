@@ -58,11 +58,11 @@ function App() {
         console.log('before url',state.url)
         searchParam = searchTerm ? `searchTerm=${searchTerm}` : searchParam;
         searchParam = location ? `${searchParam}&location=${location}`: searchParam;
-        const url = searchParam.length === 0 ? state.url: `${API_BASE_URL}/courses/search/searchBy?${searchParam.toLowerCase()}`
+        const url = searchParam.length === 0 ? currentUrl: `${API_BASE_URL}/courses/search/searchBy?${searchParam}`
         console.log('new url', url);
         setCurrentUrl(url);
         console.log('searchparam',searchParam);
-        console.log('after url', state.url);
+        console.log('after url', url);
     }
 
     const handleSignup = () => {
