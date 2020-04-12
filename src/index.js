@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './app';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
-import { blue, green, orange } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
   palette: {
