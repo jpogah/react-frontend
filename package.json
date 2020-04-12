@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "engines": {
-    "node" : "12.16.1"
+    "node": "12.16.1"
   },
   "private": true,
   "dependencies": {
@@ -27,8 +27,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
