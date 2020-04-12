@@ -90,12 +90,12 @@ export const Course = () => {
                            <TableRow>
                            <TableCell><Typography><Link href={course.email}>{course.programName + ' Email'}</Link></Typography></TableCell>
                            </TableRow>
-                           <TableRow>
+                        {course.tuitionCost && (<TableRow>
                            <TableCell><Button  color="primary" onClick={handleClickOpen}>
         Click to see tuition info
       </Button></TableCell>
       <TuitionDialog  open={open} schoolName={course.schoolName} handleClose={handleClose} tuitioninfo={course.tuitionCost} />
-                           </TableRow>
+                           </TableRow>) }
                        </TableBody>
                    
                </TableContainer>
